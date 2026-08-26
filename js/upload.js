@@ -11,6 +11,7 @@
   const successBox = document.getElementById("success-box");
 
   let selectedFiles = [];
+  let isSubmitting = false;
 
   const sportSelect = document.getElementById("game-sport");
   const sportOtherGroup = document.getElementById("game-sport-other-group");
@@ -113,12 +114,15 @@
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ idToken: window.currentIdToken, entry })
     });
-    return res.ok;
+    if (!res.ok) return { ok: false };
+    return res.json().catch(() => ({ ok: true }));
   }
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
     if (!selectedFiles.length) return;
+    if (isSubmitting) return; // estää tuplapainalluksen
+    isSubmitting = true;
 
     formError.style.display = "none";
     successBox.style.display = "none";
@@ -136,6 +140,7 @@
       formError.style.display = "block";
       uploadBtn.disabled = false;
       uploadBtn.textContent = "Lataa kuvat";
+      isSubmitting = false;
       return;
     }
 
@@ -154,19 +159,18 @@
       }
     }
 
-    uploadBtn.textContent = "Lataa kuvat";
-    uploadBtn.disabled = false;
-
     if (successCount > 0) {
+      uploadBtn.textContent = "Rekisteröidään ottelua…";
+
       const date = document.getElementById("game-date").value;
       const opponent = document.getElementById("game-opponent").value;
       const title = document.getElementById("game-title").value;
       const venue = document.getElementById("game-venue").value;
       const report = document.getElementById("game-report").value;
 
-      const sportSelect = document.getElementById("game-sport").value;
+      const sportValue = document.getElementById("game-sport").value;
       const sportOther = document.getElementById("game-sport-other").value;
-      const laji = sportSelect === "muu" ? (sportOther || "muu") : sportSelect;
+      const laji = sportValue === "muu" ? (sportOther || "muu") : sportValue;
 
       const entry = {
         tag,
@@ -178,11 +182,14 @@
         raportti: report || ""
       };
 
-      const registered = await registerGame(entry);
+      const result = await registerGame(entry);
 
-      if (registered) {
+      if (result.ok && result.duplicate) {
         successBox.style.display = "block";
-        successBox.textContent = `${successCount} kuvaa ladattu ja ottelu lisätty galleriaan automaattisesti.`;
+        successBox.textContent = `${successCount} kuvaa lisätty olemassa olevaan otteluun (${entry.date} vs ${entry.opponent}).`;
+      } else if (result.ok) {
+        successBox.style.display = "block";
+        successBox.textContent = `${successCount} kuvaa ladattu ja uusi ottelu lisätty galleriaan automaattisesti.`;
       } else {
         // Varajärjestely: jos games.json-päivitys epäonnistuu (esim. GitHub-tunnukset
         // puuttuvat Netlifystä), näytä rivi manuaalista lisäystä varten.
@@ -191,6 +198,10 @@
         snippetBox.scrollIntoView({ behavior: "smooth", block: "start" });
       }
     }
+
+    uploadBtn.textContent = "Lataa kuvat";
+    uploadBtn.disabled = false;
+    isSubmitting = false;
   });
 
   copyBtn.addEventListener("click", () => {
