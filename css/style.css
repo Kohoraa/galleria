@@ -1,0 +1,647 @@
+/* ============================================
+   DESIGN TOKENS — joukkueen värit
+   Off-White #F4F1E6 · Rink/Base Black #121212
+   Panel Black #1C1C1A · Team Yellow #F2C230
+   Muted Yellow #C9A227 · Warm Gray #8A857A
+   ============================================ */
+
+:root {
+  --ice: #f4f1e6;
+  --navy: #121212;
+  --navy-soft: #1c1c1a;
+  --steel: #3a3a35;
+  --yellow: #f2c230;
+  --frost: #c7c2b4;
+  --frost-dim: #8a857a;
+
+  --font-display: "Barlow Condensed", sans-serif;
+  --font-body: "Inter", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+
+  --radius: 2px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--navy);
+  color: var(--ice);
+  font-family: var(--font-body);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: inherit;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+/* ============================================
+   HEADER / HERO
+   ============================================ */
+
+.site-header {
+  padding: 2.5rem 1.5rem 2rem;
+  border-bottom: 1px solid rgba(184, 196, 204, 0.15);
+  position: relative;
+  overflow: hidden;
+}
+
+.site-header::before {
+  content: "";
+  position: absolute;
+  top: -40%;
+  right: -10%;
+  width: 60%;
+  height: 180%;
+  background: radial-gradient(circle, rgba(58, 90, 120, 0.35) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.title-row {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.team-mark {
+  width: clamp(48px, 8vw, 72px);
+  height: auto;
+  flex-shrink: 0;
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--yellow);
+  margin: 0 0 0.5rem;
+}
+
+.site-title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(2.75rem, 9vw, 5rem);
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  line-height: 0.95;
+  margin: 0;
+}
+
+.site-subtitle {
+  font-family: var(--font-body);
+  color: var(--frost);
+  font-size: 1rem;
+  max-width: 34rem;
+  margin: 0.75rem 0 0;
+}
+
+.header-nav {
+  margin-top: 1.5rem;
+  display: flex;
+  gap: 1.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.header-nav a {
+  text-decoration: none;
+  color: var(--frost);
+  border-bottom: 1px solid transparent;
+  padding-bottom: 2px;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.header-nav a:hover,
+.header-nav a[aria-current="page"] {
+  color: var(--ice);
+  border-color: var(--yellow);
+}
+
+/* ============================================
+   SLIM NAV (gallery page)
+   ============================================ */
+
+.site-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.1rem 1.5rem;
+  border-bottom: 1px solid rgba(196, 190, 170, 0.12);
+}
+
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.team-mark-small {
+  width: 28px;
+  height: auto;
+}
+
+.brand-word {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  font-size: 1.1rem;
+}
+
+.site-nav .header-nav {
+  margin-top: 0;
+}
+
+/* ============================================
+   HERO
+   ============================================ */
+
+.hero {
+  position: relative;
+  min-height: 58vh;
+  display: flex;
+  align-items: flex-end;
+  background: radial-gradient(circle at 75% 15%, rgba(58, 58, 53, 0.5) 0%, var(--navy) 65%);
+  background-size: cover;
+  background-position: center;
+  overflow: hidden;
+  transition: background-image 0.4s ease;
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(18, 18, 18, 0) 0%, rgba(18, 18, 18, 0.5) 55%, rgba(18, 18, 18, 0.97) 100%);
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  padding: 2.5rem 1.5rem 3rem;
+  max-width: 76rem;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.hero-title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(3rem, 11vw, 7rem);
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  line-height: 0.92;
+  margin: 0;
+}
+
+.hero-subtitle {
+  color: var(--frost);
+  font-size: 1rem;
+  max-width: 34rem;
+  margin: 0.75rem 0 0;
+}
+
+/* ============================================
+   FOOTER
+   ============================================ */
+
+.site-footer {
+  max-width: 76rem;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 3rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--frost-dim);
+  border-top: 1px solid rgba(196, 190, 170, 0.12);
+}
+
+.site-footer p {
+  margin: 0.35rem 0;
+}
+
+.site-footer a {
+  color: var(--frost);
+}
+
+/* ============================================
+   SECTION DIVIDER (refined)
+   Hairline rule with a small centered diamond mark
+   ============================================ */
+
+.rink-divider {
+  position: relative;
+  height: 1px;
+  margin: 0;
+  background: rgba(196, 190, 170, 0.14);
+  border: none;
+}
+
+.rink-divider::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 6px;
+  height: 6px;
+  background: var(--yellow);
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.top-bar {
+  height: 4px;
+  background: var(--yellow);
+}
+
+/* ============================================
+   GAME SECTIONS
+   ============================================ */
+
+/* ============================================
+   SPORT FILTER
+   ============================================ */
+
+.sport-filter {
+  max-width: 76rem;
+  margin: 0 auto;
+  padding: 1.5rem 1.5rem 0;
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.filter-pill {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  background: transparent;
+  border: 1px solid rgba(196, 190, 170, 0.25);
+  color: var(--frost);
+  padding: 0.45rem 0.9rem;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+}
+
+.filter-pill:hover {
+  border-color: var(--yellow);
+  color: var(--ice);
+}
+
+.filter-pill.is-active {
+  background: var(--yellow);
+  border-color: var(--yellow);
+  color: var(--navy);
+}
+
+.game-report {
+  color: var(--frost);
+  font-size: 0.95rem;
+  max-width: 42rem;
+  margin: 0 0 1.25rem;
+}
+
+.games {
+  max-width: 76rem;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+.game {
+  padding: 2.5rem 0;
+}
+
+.game-meta {
+  display: flex;
+  align-items: baseline;
+  gap: 0.85rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.25rem;
+}
+
+.game-number {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  color: var(--navy);
+  background: var(--yellow);
+  padding: 0.2rem 0.5rem;
+  border-radius: 2px;
+}
+
+.game-date {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--yellow);
+  letter-spacing: 0.05em;
+}
+
+.game-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 4vw, 2.25rem);
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  margin: 0;
+}
+
+.game-venue {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  color: var(--frost-dim);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 10px;
+}
+
+.thumb {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: var(--navy-soft);
+  cursor: pointer;
+  border-radius: 3px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.35s ease, filter 0.35s ease;
+}
+
+.thumb::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  box-shadow: inset 0 0 0 0 var(--yellow);
+  transition: box-shadow 0.2s ease;
+}
+
+.thumb:hover img {
+  transform: scale(1.06);
+  filter: brightness(1.05);
+}
+
+.thumb:hover::after {
+  box-shadow: inset 0 0 0 3px var(--yellow);
+}
+
+.empty-state,
+.loading-state {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--frost-dim);
+  padding: 1rem 0;
+}
+
+/* ============================================
+   LIGHTBOX
+   ============================================ */
+
+.lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(13, 27, 42, 0.96);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 2rem;
+}
+
+.lightbox.is-open {
+  display: flex;
+}
+
+.lightbox img {
+  max-width: 100%;
+  max-height: 85vh;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.lightbox-close,
+.lightbox-prev,
+.lightbox-next {
+  position: absolute;
+  background: none;
+  border: none;
+  color: var(--ice);
+  font-family: var(--font-mono);
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.75rem;
+}
+
+.lightbox-close:focus-visible,
+.lightbox-prev:focus-visible,
+.lightbox-next:focus-visible,
+a:focus-visible,
+button:focus-visible,
+input:focus-visible {
+  outline: 2px solid var(--yellow);
+  outline-offset: 2px;
+}
+
+.lightbox-close {
+  top: 1rem;
+  right: 1.5rem;
+}
+
+.lightbox-prev {
+  left: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.lightbox-next {
+  right: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* ============================================
+   UPLOAD PAGE
+   ============================================ */
+
+.upload-main {
+  max-width: 38rem;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 4rem;
+}
+
+.field-group {
+  margin-bottom: 1.25rem;
+}
+
+.field-group label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--frost);
+  margin-bottom: 0.4rem;
+}
+
+.field-group input[type="text"],
+.field-group input[type="date"],
+.field-group select,
+.field-group textarea {
+  width: 100%;
+  background: var(--navy-soft);
+  border: 1px solid rgba(184, 196, 204, 0.25);
+  border-radius: var(--radius);
+  color: var(--ice);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  padding: 0.7rem 0.8rem;
+}
+
+.field-group textarea {
+  resize: vertical;
+  min-height: 4.5rem;
+}
+
+.dropzone {
+  border: 2px dashed rgba(184, 196, 204, 0.35);
+  border-radius: var(--radius);
+  padding: 3rem 1.5rem;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--frost);
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.dropzone.is-dragover {
+  border-color: var(--yellow);
+  background: rgba(230, 57, 70, 0.06);
+}
+
+.dropzone input[type="file"] {
+  display: none;
+}
+
+.file-list {
+  margin-top: 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--frost);
+}
+
+.file-list div {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.3rem 0;
+  border-bottom: 1px solid rgba(184, 196, 204, 0.1);
+}
+
+.status-ok {
+  color: #6bcf9e;
+}
+
+.status-err {
+  color: var(--yellow);
+}
+
+.btn {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: var(--yellow);
+  color: var(--ice);
+  border: none;
+  border-radius: var(--radius);
+  padding: 0.85rem 1.5rem;
+  cursor: pointer;
+  transition: filter 0.15s ease;
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+.btn:hover {
+  filter: brightness(1.1);
+}
+
+.btn:disabled {
+  background: var(--steel);
+  cursor: not-allowed;
+  filter: none;
+}
+
+.snippet-box {
+  margin-top: 2rem;
+  padding: 1.25rem;
+  background: var(--navy-soft);
+  border: 1px solid rgba(184, 196, 204, 0.2);
+  border-radius: var(--radius);
+}
+
+.snippet-box h3 {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  font-size: 1.1rem;
+  margin: 0 0 0.5rem;
+}
+
+.snippet-box p {
+  font-size: 0.85rem;
+  color: var(--frost);
+  margin: 0 0 0.75rem;
+}
+
+.snippet-box pre {
+  background: var(--navy);
+  padding: 0.85rem;
+  border-radius: var(--radius);
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--ice);
+}
+
+.copy-btn {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  background: transparent;
+  border: 1px solid var(--frost-dim);
+  color: var(--frost);
+  padding: 0.4rem 0.8rem;
+  border-radius: var(--radius);
+  cursor: pointer;
+  margin-top: 0.5rem;
+}
+
+.copy-btn:hover {
+  border-color: var(--ice);
+  color: var(--ice);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}

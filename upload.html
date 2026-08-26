@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Lisää kuvia — Ottelukuvat</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/style.css" />
+<link rel="icon" href="assets/logo.png" />
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body>
+
+<div class="top-bar"></div>
+
+<header class="site-header">
+  <div class="title-row">
+    <img src="assets/logo.png" alt="Joukkueen logo" class="team-mark" />
+    <div>
+      <p class="eyebrow">Ylläpito</p>
+      <h1 class="site-title">Lisää kuvia</h1>
+    </div>
+  </div>
+  <p class="site-subtitle">Täytä ottelun tiedot ja raahaa kuvat laatikkoon.</p>
+  <nav class="header-nav">
+    <a href="index.html">Galleria</a>
+    <a href="upload.html" aria-current="page">Lisää kuvia</a>
+  </nav>
+</header>
+
+<hr class="rink-divider" />
+
+<main class="upload-main">
+
+  <div id="auth-gate">
+    <p class="site-subtitle">Kirjaudu Googlella jatkaaksesi.</p>
+    <div id="g_id_signin"></div>
+    <p id="auth-error" class="status-err" style="display:none; margin-top:1rem; font-family: var(--font-mono); font-size: 0.85rem;"></p>
+  </div>
+
+  <div id="upload-content" style="display:none">
+
+  <p id="signed-in-as" style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--frost-dim); margin-bottom: 1.5rem;"></p>
+
+  <p id="form-error" class="status-err" style="display:none; font-family: var(--font-mono); font-size: 0.85rem; margin-bottom: 1rem;"></p>
+  <p id="success-box" style="display:none; font-family: var(--font-mono); font-size: 0.85rem; color: #6bcf9e; margin-bottom: 1rem;"></p>
+
+  <form id="upload-form">
+    <div class="field-group">
+      <label for="game-date">Päivämäärä</label>
+      <input type="date" id="game-date" required />
+    </div>
+
+    <div class="field-group">
+      <label for="game-sport">Laji</label>
+      <select id="game-sport" required>
+        <option value="jääkiekko">Jääkiekko</option>
+        <option value="jalkapallo">Jalkapallo</option>
+        <option value="muu">Muu</option>
+      </select>
+    </div>
+
+    <div class="field-group" id="game-sport-other-group" style="display:none">
+      <label for="game-sport-other">Lajin nimi</label>
+      <input type="text" id="game-sport-other" placeholder="esim. salibandy" />
+    </div>
+
+    <div class="field-group">
+      <label for="game-opponent">Vastustaja</label>
+      <input type="text" id="game-opponent" placeholder="esim. Tappara" required />
+    </div>
+
+    <div class="field-group">
+      <label for="game-title">Ottelun otsikko (valinnainen)</label>
+      <input type="text" id="game-title" placeholder="esim. Kotiottelu" />
+    </div>
+
+    <div class="field-group">
+      <label for="game-venue">Areena (valinnainen)</label>
+      <input type="text" id="game-venue" placeholder="esim. Nokia Areena" />
+    </div>
+
+    <div class="field-group">
+      <label for="game-report">Ottelun kulku (valinnainen)</label>
+      <textarea id="game-report" rows="5" placeholder="Lyhyt kuvaus ottelun kulusta…"></textarea>
+    </div>
+
+    <div class="field-group">
+      <label>Kuvat</label>
+      <div class="dropzone" id="dropzone">
+        Raahaa kuvat tähän tai napauta valitaksesi tiedostot
+        <input type="file" id="file-input" accept="image/*" multiple />
+      </div>
+      <div class="file-list" id="file-list"></div>
+    </div>
+
+    <button type="submit" class="btn" id="upload-btn" disabled>Lataa kuvat</button>
+  </form>
+
+  <div class="snippet-box" id="snippet-box" style="display:none">
+    <h3>Varajärjestely</h3>
+    <p>Automaattinen games.json-päivitys epäonnistui. Lisää tämä rivi <code>games.json</code>-tiedostoon GitHubissa käsin ja commitoi, niin ottelu ilmestyy galleriaan.</p>
+    <pre id="snippet-text"></pre>
+    <button class="copy-btn" id="copy-btn">Kopioi</button>
+  </div>
+
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  <p>© Kohoraa <span id="copyright-year"></span>. Kaikki oikeudet pidätetään.</p>
+</footer>
+
+<script src="js/config.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/upload.js"></script>
+<script>document.getElementById("copyright-year").textContent = new Date().getFullYear();</script>
+</body>
+</html>
