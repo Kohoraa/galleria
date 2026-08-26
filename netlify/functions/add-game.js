@@ -34,6 +34,17 @@ exports.handler = async (event) => {
       Buffer.from(fileData.content, "base64").toString("utf-8")
     );
 
+    // Jos sama ottelu (sama tag) on jo listalla, ei lisätä uutta riviä.
+    // Uudet kuvat samalla tagilla liittyvät automaattisesti samaan
+    // otteluun Cloudinaryn puolella — mitään ei tarvitse kirjoittaa uudelleen.
+    const alreadyExists = currentContent.some((g) => g.tag === entry.tag);
+    if (alreadyExists) {
+      return {
+        statusCode: 200,
+        body: JSON.stringify({ ok: true, duplicate: true })
+      };
+    }
+
     currentContent.push(entry);
 
     const newContentB64 = Buffer.from(
@@ -64,7 +75,7 @@ exports.handler = async (event) => {
       throw new Error("GitHub-päivitys epäonnistui: " + errText);
     }
 
-    return { statusCode: 200, body: JSON.stringify({ ok: true }) };
+    return { statusCode: 200, body: JSON.stringify({ ok: true, duplicate: false }) };
   } catch (err) {
     console.error(err);
     return { statusCode: 403, body: JSON.stringify({ error: err.message || "Ei oikeuksia" }) };
