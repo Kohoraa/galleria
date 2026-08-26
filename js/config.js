@@ -10,7 +10,7 @@ const CLOUDINARY_CONFIG = {
 // -> Create Credentials -> OAuth client ID -> Web application
 // Authorized JavaScript origins: sivustosi Netlify-osoite
 const GOOGLE_CONFIG = {
-  clientId: "VAIHDA_TAHAN_CLIENT_ID.apps.googleusercontent.com"
+  clientId: "874779800458-971q6i0t01d0627q4gs9g85a6t5flfdu.apps.googleusercontent.com"
 };
 
 // Sallitut sähköpostit ja Cloudinary/GitHub-salaisuudet asetetaan
