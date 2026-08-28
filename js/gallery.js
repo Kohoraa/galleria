@@ -30,6 +30,14 @@
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
 
+  // Laji määrää seuran logon: jääkiekko = Kohoraa, jalkapallo = Tuisku Orivesi.
+  function clubLogoFor(laji) {
+    const key = (laji || "").toLowerCase();
+    if (key === "jääkiekko") return { src: "assets/logo.png", alt: "Kohoraa" };
+    if (key === "jalkapallo") return { src: "assets/logo-tuisku.png", alt: "Tuisku Orivesi" };
+    return null;
+  }
+
   function openLightbox(images, index) {
     currentImages = images;
     currentIndex = index;
@@ -97,7 +105,9 @@
 
     const meta = document.createElement("div");
     meta.className = "game-meta";
+    const logo = clubLogoFor(game.laji);
     meta.innerHTML = `
+      ${logo ? `<img class="club-logo" src="${logo.src}" alt="${logo.alt}" />` : ""}
       <span class="game-number">${capitalize(game.laji) || "Ottelu"} ${number}</span>
       <span class="game-date">${formatDate(game.date)}</span>
       <h2 class="game-title">${game.title || "Kohoraa"} — ${game.opponent}</h2>
