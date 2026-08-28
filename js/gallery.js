@@ -16,7 +16,10 @@
   }
 
   function fullUrl(publicId, format) {
-    return `https://res.cloudinary.com/${CLOUDINARY_CONFIG.cloudName}/image/upload/q_auto,f_auto/${publicId}.${format}`;
+    // Pieni, huomaamaton vesileima isoihin (lightbox-) kuviin.
+    // Pikkukuviin (thumbUrl) ei lisätä vesileimaa.
+    const watermark = "l_text:Arial_22:kohoraa.netlify.app,co_white,o_70,g_south_east,x_16,y_16";
+    return `https://res.cloudinary.com/${CLOUDINARY_CONFIG.cloudName}/image/upload/${watermark}/q_auto,f_auto/${publicId}.${format}`;
   }
 
   function formatDate(iso) {
