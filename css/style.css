@@ -363,6 +363,7 @@ img {
   aspect-ratio: 4 / 3;
   background: var(--navy);
   overflow: hidden;
+  position: relative;
 }
 
 .latest-card-image img {
