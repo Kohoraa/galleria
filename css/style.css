@@ -467,16 +467,13 @@ img {
   flex-shrink: 0;
 }
 
-.latest-card-image {
-  position: relative;
-}
-
-.latest-card-club-logo {
+.latest-card-image img.latest-card-club-logo {
   position: absolute;
   bottom: 8px;
   right: 8px;
+  width: 26px;
   height: 26px;
-  width: auto;
+  object-fit: contain;
   filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.6));
 }
 
