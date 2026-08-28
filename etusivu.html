@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Kohoraa — Etusivu</title>
+<meta name="description" content="Kohoraan otteluraportit ja kuvat." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/style.css" />
+<link rel="icon" href="assets/logo.png" />
+</head>
+<body>
+
+<div class="top-bar"></div>
+
+<header class="site-nav">
+  <div class="nav-brand">
+    <img src="assets/logo.png" alt="Joukkueen logo" class="team-mark-small" />
+    <span class="brand-word">Kohoraa</span>
+  </div>
+  <nav class="header-nav">
+    <a href="/" aria-current="page">Etusivu</a>
+    <a href="index.html">Ottelut</a>
+    <a href="upload.html">Lisää kuvia</a>
+  </nav>
+</header>
+
+<section class="hero" id="hero">
+  <div class="hero-content">
+    <p class="eyebrow">Kausi 2026–2027</p>
+    <h1 class="hero-title">Kohoraa</h1>
+    <p class="hero-subtitle">Otteluraportit ja kuvat laidalta, lajista riippumatta.</p>
+  </div>
+</section>
+
+<main class="latest-section">
+  <h2 class="latest-heading">Tuoreimmat ottelut</h2>
+  <div class="latest-grid" id="latest-cards"></div>
+  <a class="btn-link" href="index.html">Kaikki ottelut →</a>
+</main>
+
+<footer class="site-footer">
+  <p>© Kohoraa <span id="copyright-year"></span>. Kaikki oikeudet pidätetään — kuvien käyttö muualla vain luvalla.</p>
+  <p>Haluatko kuvasi poistettavaksi? Ota yhteyttä: <a href="mailto:VAIHDA_TAHAN@example.com">VAIHDA_TAHAN@example.com</a></p>
+</footer>
+
+<script src="js/config.js"></script>
+<script src="js/home.js"></script>
+<script>document.getElementById("copyright-year").textContent = new Date().getFullYear();</script>
+</body>
+</html>
