@@ -22,6 +22,14 @@
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
 
+  // Laji määrää seuran logon: jääkiekko = Kohoraa, jalkapallo = Tuisku Orivesi.
+  function clubLogoFor(laji) {
+    const key = (laji || "").toLowerCase();
+    if (key === "jääkiekko") return { src: "assets/logo.png", alt: "Kohoraa" };
+    if (key === "jalkapallo") return { src: "assets/logo-tuisku.png", alt: "Tuisku Orivesi" };
+    return null;
+  }
+
   async function loadFirstPhoto(tag) {
     const url = `https://res.cloudinary.com/${CLOUDINARY_CONFIG.cloudName}/image/list/${encodeURIComponent(tag)}.json`;
     try {
@@ -47,6 +55,14 @@
       img.loading = "lazy";
       img.alt = `${game.title || "Ottelu"} ${game.opponent}`;
       imgWrap.appendChild(img);
+    }
+    const logo = clubLogoFor(game.laji);
+    if (logo) {
+      const logoImg = document.createElement("img");
+      logoImg.className = "latest-card-club-logo";
+      logoImg.src = logo.src;
+      logoImg.alt = logo.alt;
+      imgWrap.appendChild(logoImg);
     }
     card.appendChild(imgWrap);
 
