@@ -82,5 +82,16 @@
 
 <script src="js/contact.js"></script>
 <script>document.getElementById("copyright-year").textContent = new Date().getFullYear();</script>
+<script>
+  (function () {
+    const params = new URLSearchParams(window.location.search);
+    const aihe = params.get("aihe");
+    if (aihe) {
+      const select = document.getElementById("contact-topic");
+      const match = Array.from(select.options).find((o) => o.value === aihe);
+      if (match) select.value = aihe;
+    }
+  })();
+</script>
 </body>
 </html>
