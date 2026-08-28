@@ -91,6 +91,7 @@
   function renderGame(game, index, total) {
     const section = document.createElement("section");
     section.className = "game";
+    section.id = `ottelu-${game.tag}`;
 
     const number = String(total - index).padStart(2, "0");
 
