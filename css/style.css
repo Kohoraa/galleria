@@ -460,6 +460,46 @@ img {
   margin: 0 0 1.25rem;
 }
 
+.club-logo {
+  height: 22px;
+  width: auto;
+  flex-shrink: 0;
+}
+
+.latest-card-image {
+  position: relative;
+}
+
+.latest-card-club-logo {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  height: 26px;
+  width: auto;
+  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.6));
+}
+
+.club-strip {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 0 0 0.85rem;
+}
+
+.club-strip-label {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--frost-dim);
+}
+
+.club-strip img {
+  height: 26px;
+  width: auto;
+  opacity: 0.9;
+}
+
 .games {
   max-width: 76rem;
   margin: 0 auto;
