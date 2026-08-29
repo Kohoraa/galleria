@@ -45,7 +45,7 @@
   function renderCard(game, photo) {
     const card = document.createElement("a");
     card.className = "latest-card";
-    card.href = `index.html#ottelu-${game.tag}`;
+    card.href = `ottelut.html#ottelu-${game.tag}`;
 
     const imgWrap = document.createElement("div");
     imgWrap.className = "latest-card-image";
