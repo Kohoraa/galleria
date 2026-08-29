@@ -30,8 +30,9 @@
 
   function buildTag() {
     const date = document.getElementById("game-date").value;
-    const opponent = document.getElementById("game-opponent").value;
-    return `peli-${date}-${slugify(opponent)}`;
+    const home = document.getElementById("game-home").value;
+    const away = document.getElementById("game-away").value;
+    return `peli-${date}-${slugify(home)}-${slugify(away)}`;
   }
 
   function renderFileList() {
@@ -163,8 +164,8 @@
       uploadBtn.textContent = "Rekisteröidään ottelua…";
 
       const date = document.getElementById("game-date").value;
-      const opponent = document.getElementById("game-opponent").value;
-      const title = document.getElementById("game-title").value;
+      const home = document.getElementById("game-home").value;
+      const away = document.getElementById("game-away").value;
       const venue = document.getElementById("game-venue").value;
       const report = document.getElementById("game-report").value;
 
@@ -176,8 +177,9 @@
         tag,
         date,
         laji,
-        opponent,
-        title: title || "Kohoraa",
+        kotijoukkue: home,
+        vierasjoukkue: away,
+        title: `${home} - ${away}`,
         venue: venue || "",
         raportti: report || ""
       };
@@ -186,7 +188,7 @@
 
       if (result.ok && result.duplicate) {
         successBox.style.display = "block";
-        successBox.textContent = `${successCount} kuvaa lisätty olemassa olevaan otteluun (${entry.date} vs ${entry.opponent}).`;
+        successBox.textContent = `${successCount} kuvaa lisätty olemassa olevaan otteluun (${entry.title}).`;
       } else if (result.ok) {
         successBox.style.display = "block";
         successBox.textContent = `${successCount} kuvaa ladattu ja uusi ottelu lisätty galleriaan automaattisesti.`;
