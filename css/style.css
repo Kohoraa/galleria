@@ -660,6 +660,39 @@ input:focus-visible {
   transform: translateY(-50%);
 }
 
+.lightbox-caption {
+  position: absolute;
+  bottom: 1.25rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--frost);
+  background: rgba(0, 0, 0, 0.55);
+  padding: 0.5rem 1rem;
+  border-radius: 3px;
+  text-align: center;
+  white-space: nowrap;
+  z-index: 2;
+}
+
+.lightbox-caption a {
+  color: var(--yellow);
+  text-decoration: underline;
+}
+
+@media (max-width: 480px) {
+  .lightbox-caption {
+    white-space: normal;
+    max-width: 90%;
+    font-size: 0.72rem;
+  }
+}
+
+/* ============================================
+   UPLOAD PAGE
+   ============================================ */
+
 /* ============================================
    UPLOAD PAGE
    ============================================ */
