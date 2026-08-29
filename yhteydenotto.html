@@ -73,6 +73,10 @@
     Kiitos viestistä! Vastaamme mahdollisimman pian.
   </p>
 
+  <p id="mobilepay-note" style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--frost-dim); margin-top: 2rem;"></p>
+
+</main>
+
 </main>
 
 <footer class="site-footer">
@@ -84,8 +88,17 @@
   <p>© Kohoraa <span id="copyright-year"></span>. Kuvat ovat tekijänoikeuden alaisia. Kuvien käyttöön muualla, alkuperäistiedostoihin tai poistopyyntöihin: <a href="yhteydenotto.html">ota yhteyttä</a>.</p>
 </footer>
 
+<script src="js/config.js"></script>
 <script src="js/contact.js"></script>
 <script>document.getElementById("copyright-year").textContent = new Date().getFullYear();</script>
+<script>
+  (function () {
+    if (typeof MOBILEPAY_CONFIG !== "undefined" && !MOBILEPAY_CONFIG.code.startsWith("VAIHDA")) {
+      document.getElementById("mobilepay-note").textContent =
+        `Halutessasi voit tukea ${MOBILEPAY_CONFIG.teamName} -joukkuetta MobilePaylla: ${MOBILEPAY_CONFIG.code}`;
+    }
+  })();
+</script>
 <script>
   (function () {
     const params = new URLSearchParams(window.location.search);
@@ -94,6 +107,16 @@
       const select = document.getElementById("contact-topic");
       const match = Array.from(select.options).find((o) => o.value === aihe);
       if (match) select.value = aihe;
+    }
+
+    const peli = params.get("peli");
+    const otsikko = params.get("otsikko");
+    if (peli || otsikko) {
+      const message = document.getElementById("contact-message");
+      const label = otsikko || peli;
+      message.value = `Kiinnostaisin saada kuvat ottelusta: ${label}\n(tunniste: ${peli || "?"})\n\n`;
+      message.focus();
+      message.setSelectionRange(message.value.length, message.value.length);
     }
   })();
 </script>
