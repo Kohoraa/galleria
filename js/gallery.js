@@ -5,6 +5,8 @@
   const lightboxImg = document.getElementById("lightbox-img");
   let currentImages = [];
   let currentIndex = 0;
+  let currentGame = null;
+  const captionLink = document.getElementById("lightbox-caption-link");
 
   // Kaikki ottelut + niiden Cloudinary-kuvat ladataan kerran muistiin,
   // jotta lajisuodatus voi vaihtaa näkymää ilman uutta verkkohakua.
@@ -16,10 +18,25 @@
   }
 
   function fullUrl(publicId, format) {
-    // Pieni, huomaamaton vesileima isoihin (lightbox-) kuviin.
-    // Pikkukuviin (thumbUrl) ei lisätä vesileimaa.
-    const watermark = "l_text:Arial_22:kohoraa.netlify.app,co_white,o_70,g_south_east,x_16,y_16";
-    return `https://res.cloudinary.com/${CLOUDINARY_CONFIG.cloudName}/image/upload/${watermark}/q_auto,f_auto/${publicId}.${format}`;
+    // Rajaa leveys ennen vesileimaa (järjestys tärkeä: leiman asemointi
+    // lasketaan sen hetkisen, jo pienennetyn kuvan mukaan).
+    // c_limit ei koskaan suurenna pienempiä kuvia, vain rajaa isoja.
+    const resize = "w_2000,c_limit,q_auto,f_auto";
+    const watermark = "l_text:Arial_38:kohoraa.netlify.app,co_white,o_80,g_south_east,x_24,y_24";
+    return `https://res.cloudinary.com/${CLOUDINARY_CONFIG.cloudName}/image/upload/${resize}/${watermark}/${publicId}.${format}`;
+  }
+
+  function preload(url) {
+    const img = new Image();
+    img.src = url;
+  }
+
+  function preloadNeighbors(images, index) {
+    if (images.length < 2) return;
+    const nextIndex = (index + 1) % images.length;
+    const prevIndex = (index - 1 + images.length) % images.length;
+    preload(images[nextIndex]);
+    preload(images[prevIndex]);
   }
 
   function formatDate(iso) {
@@ -41,12 +58,29 @@
     return null;
   }
 
-  function openLightbox(images, index) {
+  function gameLabel(game) {
+    return `${game.title || "Kohoraa"} vs ${game.opponent}, ${formatDate(game.date)}`;
+  }
+
+  function updateCaptionLink(game) {
+    if (!captionLink || !game) return;
+    const params = new URLSearchParams({
+      aihe: "Kuvapyyntö",
+      peli: game.tag,
+      otsikko: gameLabel(game)
+    });
+    captionLink.href = `yhteydenotto.html?${params.toString()}`;
+  }
+
+  function openLightbox(images, index, game) {
     currentImages = images;
     currentIndex = index;
+    currentGame = game;
     lightboxImg.src = currentImages[currentIndex];
     lightbox.classList.add("is-open");
     document.body.style.overflow = "hidden";
+    preloadNeighbors(currentImages, currentIndex);
+    updateCaptionLink(currentGame);
   }
 
   function closeLightbox() {
@@ -58,6 +92,7 @@
   function step(delta) {
     currentIndex = (currentIndex + delta + currentImages.length) % currentImages.length;
     lightboxImg.src = currentImages[currentIndex];
+    preloadNeighbors(currentImages, currentIndex);
   }
 
   document.getElementById("lightbox-close").addEventListener("click", closeLightbox);
@@ -72,6 +107,40 @@
     if (e.key === "ArrowRight") step(1);
     if (e.key === "ArrowLeft") step(-1);
   });
+
+  // Pyyhkäisytuki kosketusnäytöille (puhelin/tabletti).
+  // Vaakasuuntainen liike selaa kuvia, pystysuuntainen jätetään huomiotta
+  // (ettei vahingossa laukea kun käyttäjä yrittää vain scrollata).
+  let touchStartX = 0;
+  let touchStartY = 0;
+  const SWIPE_THRESHOLD = 50;
+
+  lightbox.addEventListener(
+    "touchstart",
+    (e) => {
+      touchStartX = e.changedTouches[0].clientX;
+      touchStartY = e.changedTouches[0].clientY;
+    },
+    { passive: true }
+  );
+
+  lightbox.addEventListener(
+    "touchend",
+    (e) => {
+      const deltaX = e.changedTouches[0].clientX - touchStartX;
+      const deltaY = e.changedTouches[0].clientY - touchStartY;
+
+      if (Math.abs(deltaX) < SWIPE_THRESHOLD) return;
+      if (Math.abs(deltaX) < Math.abs(deltaY)) return; // pystyliike, ei selausta
+
+      if (deltaX < 0) {
+        step(1); // pyyhkäisy vasemmalle -> seuraava kuva
+      } else {
+        step(-1); // pyyhkäisy oikealle -> edellinen kuva
+      }
+    },
+    { passive: true }
+  );
 
   async function loadGamePhotos(tag) {
     const url = `https://res.cloudinary.com/${CLOUDINARY_CONFIG.cloudName}/image/list/${encodeURIComponent(tag)}.json`;
@@ -152,7 +221,7 @@
       img.loading = "lazy";
       img.alt = `${game.title || "Ottelu"} ${game.opponent}, kuva ${i + 1}`;
       thumb.appendChild(img);
-      thumb.addEventListener("click", () => openLightbox(fullUrls, i));
+      thumb.addEventListener("click", () => openLightbox(fullUrls, i, game));
       grid.appendChild(thumb);
     });
 
