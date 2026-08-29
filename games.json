@@ -1,5 +1,4 @@
 [
-  
   {
     "tag": "peli-2026-08-25-kpk",
     "date": "2026-08-25",
@@ -9,7 +8,6 @@
     "venue": "Mänttä areena",
     "raportti": "Harjoitusottelu Mantässä, joka tiukan väännön päätteeksi päätyi kolmannen erän jäähyilyyn ja 7-3 tappioon. Kuvat kokeeksi iPhonella."
   },
-
   {
     "tag": "peli-2026-08-27-fc-haka-j-musta",
     "date": "2026-08-27",
@@ -18,5 +16,15 @@
     "title": "Tuisku P16 - FC Haka-j/Musta",
     "venue": "Rovastinkangas TN, Orivesi",
     "raportti": "Tuisku P16 - FC Haka-j/Musta 2-5\nTuisku pystui Hallitsemaan ensimmäisen puoliajan peliä ja meni 1-0 johtoon. Onni Niemisen torjuma rankkari auttoi asiaa. Puolen tunnin pelin jälkeen FC HAKA #10 Oiva Niemelä ratkaisi ottelun kolmella nopealla maalilla. Toisella puoliajalla Tuisku yritti saada hyökkäyspeliä käyntiin vaikka FC HAKA # 24 Jami Eerikinharju aloittikin jakson heti toisella minuutilla tekemällä maalin. Takaa-ajoa käynnisti Tuisku #11 Pisilä 65 minuutilla tekemällä ottelun toisen maalinsa. Yritys ei kuitenkaan riittänyt ja loppulukemat 2-5."
+  },
+  {
+    "tag": "peli-2026-08-25-kpk-fortuna-u18",
+    "date": "2026-08-25",
+    "laji": "jääkiekko",
+    "kotijoukkue": "KPK",
+    "vierasjoukkue": "Fortuna U18",
+    "title": "KPK - Fortuna U18",
+    "venue": "Mänttä areena",
+    "raportti": "Harjoitusottelu Mantässä, joka tiukan väännön päätteeksi päätyi kolmannen erän jäähyilyyn ja 7-3 tappioon. Kuvat kokeeksi iPhonella."
   }
 ]
