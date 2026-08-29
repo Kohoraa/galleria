@@ -23,7 +23,8 @@
   // Pieni, voimakkaasti sumennettu esikatseluversio — latautuu lähes
   // välittömästi ja näytetään heti täyskokoisen kuvan latautuessa taustalla.
   function blurUrl(publicId, format) {
-    return `https://res.cloudinary.com/${CLOUDINARY_CONFIG.cloudName}/image/upload/w_30,e_blur:1000,q_1,f_auto/${publicId}.${format}`;
+    const resize = `w_${targetWidth()},c_limit`;
+    return `https://res.cloudinary.com/${CLOUDINARY_CONFIG.cloudName}/image/upload/${resize},e_blur:1000,q_1,f_auto/${publicId}.${format}`;
   }
 
   // Lasketaan sopiva leveys näytön koon mukaan (huomioi myös
