@@ -59,7 +59,7 @@
   }
 
   function gameLabel(game) {
-    return `${game.title || "Kohoraa"} vs ${game.opponent}, ${formatDate(game.date)}`;
+    return `${game.title || "Ottelu"}, ${formatDate(game.date)}`;
   }
 
   function updateCaptionLink(game) {
@@ -182,7 +182,7 @@
       ${logo ? `<img class="club-logo" src="${logo.src}" alt="${logo.alt}" />` : ""}
       <span class="game-number">${capitalize(game.laji) || "Ottelu"} ${number}</span>
       <span class="game-date">${formatDate(game.date)}</span>
-      <h2 class="game-title">${game.title || "Kohoraa"} — ${game.opponent}</h2>
+      <h2 class="game-title">${game.title || "Ottelu"}</h2>
       ${game.venue ? `<span class="game-venue">${game.venue}</span>` : ""}
     `;
     section.appendChild(meta);
@@ -219,7 +219,7 @@
       const img = document.createElement("img");
       img.src = thumbUrl(r.public_id, r.format);
       img.loading = "lazy";
-      img.alt = `${game.title || "Ottelu"} ${game.opponent}, kuva ${i + 1}`;
+      img.alt = `${game.title || "Ottelu"}, kuva ${i + 1}`;
       thumb.appendChild(img);
       thumb.addEventListener("click", () => openLightbox(fullUrls, i, game));
       grid.appendChild(thumb);

@@ -62,7 +62,7 @@ exports.handler = async (event) => {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          message: `Lisää ottelu: ${entry.date} vs ${entry.opponent}`,
+               message: `Lisää ottelu: ${entry.date} - ${entry.title}`,
           content: newContentB64,
           sha: fileData.sha,
           branch

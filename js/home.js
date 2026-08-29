@@ -53,7 +53,7 @@
       const img = document.createElement("img");
       img.src = thumbUrl(photo.public_id, photo.format);
       img.loading = "lazy";
-      img.alt = `${game.title || "Ottelu"} ${game.opponent}`;
+     img.alt = `${game.title || "Ottelu"}`;
       imgWrap.appendChild(img);
     }
     const logo = clubLogoFor(game.laji);
@@ -70,7 +70,7 @@
     body.className = "latest-card-body";
     body.innerHTML = `
       <span class="latest-card-sport">${capitalize(game.laji) || "Ottelu"}</span>
-      <h3 class="latest-card-title">${game.title || "Kohoraa"} — ${game.opponent}</h3>
+      <h3 class="latest-card-title">${game.title || "Ottelu"}</h3>
       <span class="latest-card-date">${formatDate(game.date)}</span>
     `;
     card.appendChild(body);

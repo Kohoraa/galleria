@@ -13,6 +13,12 @@ const GOOGLE_CONFIG = {
   clientId: "874779800458-971q6i0t01d0627q4gs9g85a6t5flfdu.apps.googleusercontent.com"
 };
 
+// Vapaaehtoinen tuki joukkueelle (ei pakollinen, mainitaan hillitysti)
+const MOBILEPAY_CONFIG = {
+  teamName: "Fortuna U18",
+  code: "VAIHDA_TAHAN_MOBILEPAY_KOODI"
+};
+
 // Sallitut sähköpostit ja Cloudinary/GitHub-salaisuudet asetetaan
 // Netlifyssä ympäristömuuttujina (Site settings -> Environment variables),
 // EI tähän tiedostoon — ks. README.
