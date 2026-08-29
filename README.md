@@ -13,20 +13,20 @@ teknisesti alusta loppuun.
 
 ## Mitä tällä voi tehdä?
 
-- 📸 **Julkaista otteluista kuvia** ryhmiteltynä ottelun mukaan, useasta
+- **Julkaista otteluista kuvia** ryhmiteltynä ottelun mukaan, useasta
   lajista ja seurasta samalla sivustolla
-- 🏒⚽ **Suodattaa lajin mukaan** (jääkiekko, jalkapallo, tai mikä tahansa
+- **Suodattaa lajin mukaan** (jääkiekko, jalkapallo, tai mikä tahansa
   muu laji jonka lisäät)
-- 📝 **Kirjoittaa lyhyen otteluraportin** kuvien yhteyteen, ei pelkkää
+- **Kirjoittaa lyhyen otteluraportin** kuvien yhteyteen, ei pelkkää
   kuvagalleriaa
-- 🔒 **Rajata kuvien lisäämisen** vain itselleen (tai valituille
+- **Rajata kuvien lisäämisen** vain itselleen (tai valituille
   henkilöille) Google-kirjautumisella — kuka tahansa ei voi ladata roskaa
   sivustolle
-- 💌 **Ottaa vastaan yhteydenottoja ja kuvapyyntöjä** lomakkeella, joka
+- **Ottaa vastaan yhteydenottoja ja kuvapyyntöjä** lomakkeella, joka
   osaa jo kertoa mistä ottelusta on kyse
-- 🖼️ **Lähettää alkuperäisiä, vesileimattomia kuvia** pyytäjälle yhdellä
+- **Lähettää alkuperäisiä, vesileimattomia kuvia** pyytäjälle yhdellä
   klikkauksella, ilman käsin ladattavaa tiedostoa
-- 💛 **Näyttää seuran oman brändin** — logon, värit, ja halutessaan
+- **Näyttää seuran oman brändin** — logon, värit, ja halutessaan
   vapaaehtoisen tukilinkin (esim. MobilePay)
 
 Kaikki tämä ilman erillistä palvelinta ylläpidettäväksi, ja ilmaisilla
