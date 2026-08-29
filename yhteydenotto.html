@@ -155,7 +155,10 @@
     if (aihe) {
       const select = document.getElementById("contact-topic");
       const match = Array.from(select.options).find((o) => o.value === aihe);
-      if (match) select.value = aihe;
+      if (match) {
+        select.value = aihe;
+        select.dispatchEvent(new Event("change"));
+      }
     }
 
     const peli = params.get("peli");
