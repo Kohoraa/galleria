@@ -836,6 +836,22 @@ input:focus-visible {
   color: var(--ice);
 }
 
+.link-row {
+  padding: 0.4rem 0;
+  border-bottom: 1px solid rgba(184, 196, 204, 0.1);
+}
+
+.link-row a {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--yellow);
+  text-decoration: none;
+}
+
+.link-row a:hover {
+  text-decoration: underline;
+}
+
 .copy-btn {
   font-family: var(--font-mono);
   font-size: 0.75rem;
