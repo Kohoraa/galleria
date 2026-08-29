@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Ottelukuvat</title>
+<meta name="description" content="Jääkiekko-ottelukuvia kaudelta." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/style.css" />
+<link rel="icon" href="assets/logo.png" />
+</head>
+<body>
+
+<div class="top-bar"></div>
+
+<header class="site-nav">
+  <div class="nav-brand">
+    <img src="assets/logo.png" alt="Joukkueen logo" class="team-mark-small" />
+    <span class="brand-word">Ottelukuvat</span>
+  </div>
+  <nav class="header-nav">
+    <a href="/">Etusivu</a>
+    <a href="ottelut.html" aria-current="page">Ottelut</a>
+    <a href="yhteydenotto.html">Yhteydenotto</a>
+  </nav>
+</header>
+
+<section class="hero" id="hero">
+  <div class="hero-content">
+    <p class="eyebrow">Kausi 2026–2027</p>
+    <h1 class="hero-title">Ottelukuvat</h1>
+    <p class="hero-subtitle">Kuvia laidalta, kaudesta toiseen.</p>
+  </div>
+</section>
+
+<hr class="rink-divider" />
+
+<div class="sport-filter" id="sport-filter"></div>
+
+<main class="games" id="games"></main>
+
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lightbox-close" aria-label="Sulje">✕</button>
+  <button class="lightbox-prev" id="lightbox-prev" aria-label="Edellinen kuva">‹</button>
+  <img id="lightbox-img" alt="" />
+  <button class="lightbox-next" id="lightbox-next" aria-label="Seuraava kuva">›</button>
+  <p class="lightbox-caption">
+    Vesileimattu esikatselu — <a href="yhteydenotto.html?aihe=Kuvapyynt%C3%B6" id="lightbox-caption-link">pyydä alkuperäinen kuva ilman vesileimaa</a>
+  </p>
+</div>
+
+<footer class="site-footer">
+  <div class="club-strip">
+    <span class="club-strip-label">Kuvaan otteluita seuroille</span>
+    <img src="assets/logo-jaakiekko.png" alt="Kohoraa" />
+    <img src="assets/logo-tuisku.png" alt="Tuisku Orivesi" />
+  </div>
+  <p>© Kohoraa <span id="copyright-year"></span>. Kuvat ovat tekijänoikeuden alaisia. Kuvien käyttöön muualla, alkuperäistiedostoihin tai poistopyyntöihin: <a href="yhteydenotto.html">ota yhteyttä</a>.</p>
+</footer>
+
+<script src="js/config.js"></script>
+<script src="js/gallery.js"></script>
+</body>
+</html>
