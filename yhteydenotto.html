@@ -166,7 +166,7 @@
     if (peli || otsikko) {
       const message = document.getElementById("contact-message");
       const label = otsikko || peli;
-      message.value = `Kiinnostaisin saada kuvat ottelusta: ${label}\n(tunniste: ${peli || "?"})\n\n`;
+      message.value = `Minua kiinnostaisi saada kuvat ottelusta: ${label}\n(tunniste: ${peli || "?"})\n\n`;
       message.focus();
       message.setSelectionRange(message.value.length, message.value.length);
     }
