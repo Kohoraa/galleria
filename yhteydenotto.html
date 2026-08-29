@@ -59,6 +59,13 @@
       </select>
     </div>
 
+    <div class="field-group" id="contact-game-group" style="display:none">
+      <label for="contact-game">Mistä ottelusta?</label>
+      <select id="contact-game" name="ottelu">
+        <option value="">Valitse ottelu…</option>
+      </select>
+    </div>
+
     <div class="field-group">
       <label for="contact-message">Viesti</label>
       <textarea id="contact-message" name="viesti" rows="6" required></textarea>
@@ -74,8 +81,6 @@
   </p>
 
   <p id="mobilepay-note" style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--frost-dim); margin-top: 2rem;"></p>
-
-</main>
 
 </main>
 
@@ -97,6 +102,50 @@
       document.getElementById("mobilepay-note").textContent =
         `Halutessasi voit tukea ${MOBILEPAY_CONFIG.teamName} -joukkuetta MobilePaylla: ${MOBILEPAY_CONFIG.code}`;
     }
+  })();
+</script>
+<script>
+  (function () {
+    const topicSelect = document.getElementById("contact-topic");
+    const gameGroup = document.getElementById("contact-game-group");
+    const gameSelect = document.getElementById("contact-game");
+
+    function updateGameVisibility() {
+      const relevant = topicSelect.value === "Kuvapyyntö" || topicSelect.value === "Kuvan poistopyyntö";
+      gameGroup.style.display = relevant ? "block" : "none";
+    }
+
+    topicSelect.addEventListener("change", updateGameVisibility);
+
+    function formatDate(iso) {
+      const d = new Date(iso + "T00:00:00");
+      if (isNaN(d)) return iso;
+      return d.toLocaleDateString("fi-FI", { day: "numeric", month: "long", year: "numeric" });
+    }
+
+    fetch("games.json")
+      .then((res) => res.json())
+      .then((games) => {
+        games.sort((a, b) => (a.date < b.date ? 1 : -1));
+        games.forEach((g) => {
+          const opt = document.createElement("option");
+          opt.value = g.tag;
+          opt.textContent = `${formatDate(g.date)} — ${g.title || "Ottelu"}`;
+          gameSelect.appendChild(opt);
+        });
+
+        const params = new URLSearchParams(window.location.search);
+        const peli = params.get("peli");
+        if (peli) {
+          const match = Array.from(gameSelect.options).find((o) => o.value === peli);
+          if (match) gameSelect.value = peli;
+        }
+      })
+      .catch(() => {
+        gameSelect.innerHTML = '<option value="">Otteluita ei voitu ladata</option>';
+      });
+
+    updateGameVisibility();
   })();
 </script>
 <script>
