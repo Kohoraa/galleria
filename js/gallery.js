@@ -3,7 +3,7 @@
   const filterBar = document.getElementById("sport-filter");
   const lightbox = document.getElementById("lightbox");
   const lightboxImg = document.getElementById("lightbox-img");
-  let currentImages = [];
+  let currentImages = []; // [{public_id, format}, ...]
   let currentIndex = 0;
   let currentGame = null;
   const captionLink = document.getElementById("lightbox-caption-link");
@@ -13,30 +13,65 @@
   let loadedGames = [];
   let activeSport = "kaikki";
 
+  // Pikkukuvat: vain leveys rajattu, EI pakotettua muotoa/rajausta —
+  // pysty- ja vaakakuvat näkyvät omassa luontaisessa muodossaan
+  // masonry-tyylisessä ruudukossa (ks. CSS: .grid käyttää columns-asettelua).
   function thumbUrl(publicId, format) {
-    return `https://res.cloudinary.com/${CLOUDINARY_CONFIG.cloudName}/image/upload/w_500,h_375,c_fill,q_auto,f_auto/${publicId}.${format}`;
+    return `https://res.cloudinary.com/${CLOUDINARY_CONFIG.cloudName}/image/upload/w_500,c_limit,q_auto,f_auto/${publicId}.${format}`;
+  }
+
+  // Pieni, voimakkaasti sumennettu esikatseluversio — latautuu lähes
+  // välittömästi ja näytetään heti täyskokoisen kuvan latautuessa taustalla.
+  function blurUrl(publicId, format) {
+    return `https://res.cloudinary.com/${CLOUDINARY_CONFIG.cloudName}/image/upload/w_30,e_blur:1000,q_1,f_auto/${publicId}.${format}`;
+  }
+
+  // Lasketaan sopiva leveys näytön koon mukaan (huomioi myös
+  // retina-näytöt devicePixelRatio:n kautta), rajattuna järkeviin
+  // ääripäihin ettei koskaan pyydetä tarpeettoman isoa tai pientä kuvaa.
+  function targetWidth() {
+    const dpr = window.devicePixelRatio || 1;
+    const w = Math.round(window.innerWidth * dpr);
+    return Math.min(Math.max(w, 640), 2000);
   }
 
   function fullUrl(publicId, format) {
-    // Rajaa leveys ennen vesileimaa (järjestys tärkeä: leiman asemointi
-    // lasketaan sen hetkisen, jo pienennetyn kuvan mukaan).
-    // c_limit ei koskaan suurenna pienempiä kuvia, vain rajaa isoja.
-    const resize = "w_2000,c_limit,q_auto,f_auto";
+    const resize = `w_${targetWidth()},c_limit,q_auto,f_auto`;
     const watermark = "l_text:Arial_38:kohoraa.netlify.app,co_white,o_80,g_south_east,x_24,y_24";
     return `https://res.cloudinary.com/${CLOUDINARY_CONFIG.cloudName}/image/upload/${resize}/${watermark}/${publicId}.${format}`;
   }
 
-  function preload(url) {
+  function preloadFull(item) {
     const img = new Image();
-    img.src = url;
+    img.src = fullUrl(item.public_id, item.format);
   }
 
   function preloadNeighbors(images, index) {
     if (images.length < 2) return;
     const nextIndex = (index + 1) % images.length;
     const prevIndex = (index - 1 + images.length) % images.length;
-    preload(images[nextIndex]);
-    preload(images[prevIndex]);
+    preloadFull(images[nextIndex]);
+    preloadFull(images[prevIndex]);
+  }
+
+  // Näyttää ensin sumean pikkukuvan heti, ja vaihtaa sen tarkkaan
+  // versioon vasta kun se on kokonaan ladattu taustalla ("blur-up").
+  function showImage(index) {
+    const item = currentImages[index];
+    if (!item) return;
+
+    lightboxImg.classList.add("is-loading");
+    lightboxImg.src = blurUrl(item.public_id, item.format);
+
+    const full = fullUrl(item.public_id, item.format);
+    const loader = new Image();
+    loader.onload = () => {
+      // Ohita jos käyttäjä ehti jo selata eteenpäin ennen latauksen valmistumista.
+      if (currentImages[currentIndex] !== item) return;
+      lightboxImg.src = full;
+      lightboxImg.classList.remove("is-loading");
+    };
+    loader.src = full;
   }
 
   function formatDate(iso) {
@@ -76,7 +111,7 @@
     currentImages = images;
     currentIndex = index;
     currentGame = game;
-    lightboxImg.src = currentImages[currentIndex];
+    showImage(currentIndex);
     lightbox.classList.add("is-open");
     document.body.style.overflow = "hidden";
     preloadNeighbors(currentImages, currentIndex);
@@ -91,7 +126,7 @@
 
   function step(delta) {
     currentIndex = (currentIndex + delta + currentImages.length) % currentImages.length;
-    lightboxImg.src = currentImages[currentIndex];
+    showImage(currentIndex);
     preloadNeighbors(currentImages, currentIndex);
   }
 
@@ -211,8 +246,6 @@
     const grid = document.createElement("div");
     grid.className = "grid";
 
-    const fullUrls = resources.map((r) => fullUrl(r.public_id, r.format));
-
     resources.forEach((r, i) => {
       const thumb = document.createElement("div");
       thumb.className = "thumb";
@@ -221,7 +254,7 @@
       img.loading = "lazy";
       img.alt = `${game.title || "Ottelu"}, kuva ${i + 1}`;
       thumb.appendChild(img);
-      thumb.addEventListener("click", () => openLightbox(fullUrls, i, game));
+      thumb.addEventListener("click", () => openLightbox(resources, i, game));
       grid.appendChild(thumb);
     });
 
