@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Ottelukuvat</title>
-<meta name="description" content="Jääkiekko-ottelukuvia kaudelta." />
+<title>Kohoraa — Etusivu</title>
+<meta name="description" content="Kohoraan otteluraportit ja kuvat." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -18,11 +18,11 @@
 <header class="site-nav">
   <div class="nav-brand">
     <img src="assets/logo.png" alt="Joukkueen logo" class="team-mark-small" />
-    <span class="brand-word">Ottelukuvat</span>
+    <span class="brand-word">Kohoraa</span>
   </div>
   <nav class="header-nav">
-    <a href="/">Etusivu</a>
-    <a href="index.html" aria-current="page">Ottelut</a>
+    <a href="/" aria-current="page">Etusivu</a>
+    <a href="ottelut.html">Ottelut</a>
     <a href="yhteydenotto.html">Yhteydenotto</a>
   </nav>
 </header>
@@ -30,37 +30,37 @@
 <section class="hero" id="hero">
   <div class="hero-content">
     <p class="eyebrow">Kausi 2026–2027</p>
-    <h1 class="hero-title">Ottelukuvat</h1>
-    <p class="hero-subtitle">Kuvia laidalta, kaudesta toiseen.</p>
+    <h1 class="hero-title">Kohoraa Galleria</h1>
+    <p class="hero-subtitle">Räpsyjä kenttien laidalta.</p>
   </div>
 </section>
 
-<hr class="rink-divider" />
-
-<div class="sport-filter" id="sport-filter"></div>
-
-<main class="games" id="games"></main>
-
-<div class="lightbox" id="lightbox">
-  <button class="lightbox-close" id="lightbox-close" aria-label="Sulje">✕</button>
-  <button class="lightbox-prev" id="lightbox-prev" aria-label="Edellinen kuva">‹</button>
-  <img id="lightbox-img" alt="" />
-  <button class="lightbox-next" id="lightbox-next" aria-label="Seuraava kuva">›</button>
-  <p class="lightbox-caption">
-    Vesileimattu esikatselu — <a href="yhteydenotto.html?aihe=Kuvapyynt%C3%B6" id="lightbox-caption-link">pyydä alkuperäinen kuva ilman vesileimaa</a>
-  </p>
+<div class="promo-banner">
+  <div class="promo-banner-text">
+    <h2>Haluatko jonkin kuvan omaksesi?</h2>
+    <p>Pyydä alkuperäistiedosto tai käyttölupa mihin tahansa julkaistuun kuvaan — se käy sukkelaan tästä tai jokaisen kuvan luota löytyvästä linkistä.</p>
+  </div>
+  <a class="btn-solid" href="yhteydenotto.html?aihe=Kuvapyynt%C3%B6">Pyydä kuva →</a>
 </div>
+
+<main class="latest-section">
+  <h2 class="latest-heading">Tuoreimmat ottelut</h2>
+  <div class="latest-grid" id="latest-cards"></div>
+  <a class="btn-link" href="ottelut.html">Kaikki ottelut →</a>
+</main>
 
 <footer class="site-footer">
   <div class="club-strip">
-    <span class="club-strip-label">Kuvaan otteluita seuroille</span>
+    <span class="club-strip-label">Kuvaan ehtiessäni näitä seuroja</span>
     <img src="assets/logo-jaakiekko.png" alt="Kohoraa" />
     <img src="assets/logo-tuisku.png" alt="Tuisku Orivesi" />
   </div>
-  <p>© Kohoraa <span id="copyright-year"></span>. Kuvat ovat tekijänoikeuden alaisia. Kuvien käyttöön muualla, alkuperäistiedostoihin tai poistopyyntöihin: <a href="yhteydenotto.html">ota yhteyttä</a>.</p>
+  <p>© Kohoraa <span id="copyright-year"></span>. Kuvat ovat tekijänoikeuden alaisia. Kuvien käyttöön muualla, alkuperäistiedostoihin tai kuvien poistopyyntöihin sivustolta: <a href="yhteydenotto.html">ota yhteyttä</a>.</p>
+  <p class="footer-admin-link"><a href="upload.html">Ylläpito</a></p>
 </footer>
 
 <script src="js/config.js"></script>
-<script src="js/gallery.js"></script>
+<script src="js/home.js"></script>
+<script>document.getElementById("copyright-year").textContent = new Date().getFullYear();</script>
 </body>
 </html>
