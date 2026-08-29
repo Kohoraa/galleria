@@ -2,11 +2,6 @@
   publish = "."
   functions = "netlify/functions"
 
-[[redirects]]
-  from = "/"
-  to = "/etusivu.html"
-  status = 200
-  force = true
 
 [[headers]]
   for = "/*"
