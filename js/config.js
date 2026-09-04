@@ -17,7 +17,10 @@ const GOOGLE_CONFIG = {
 const MOBILEPAY_CONFIG = {
   teamName: "Fortuna U18",
   recipientName: "Fortuna ry",
-  code: "1502AQ"
+  code: "VAIHDA_TAHAN_MOBILEPAY_KOODI"
+  // MobilePay pois käytöstä toistaiseksi (selvitetään rahankeräyslupa-asiaa Fortuna ry:n kanssa).
+  // Oikea koodi talteen tänne, ei tarvitse etsiä myöhemmin — vaihda ylläolevaan code-riviin kun asia on selvä:
+  // code: "1502AQ"
 };
 
 // Sallitut sähköpostit ja Cloudinary/GitHub-salaisuudet asetetaan
