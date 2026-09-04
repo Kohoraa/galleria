@@ -399,6 +399,47 @@ img {
   color: var(--frost-dim);
 }
 
+.latest-promo-card {
+  background: linear-gradient(135deg, rgba(242, 194, 48, 0.14), rgba(242, 194, 48, 0.04));
+  border: 1px solid rgba(242, 194, 48, 0.35);
+  border-radius: 4px;
+  padding: 1.1rem 1.1rem 1.2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.latest-promo-card h3 {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  font-size: 1.15rem;
+  margin: 0;
+  line-height: 1.1;
+}
+
+.latest-promo-card p {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  color: var(--frost);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.latest-promo-card .btn-solid {
+  align-self: flex-start;
+  margin-top: 0.4rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  background: var(--yellow);
+  color: var(--navy);
+  padding: 0.5rem 0.9rem;
+  border-radius: 3px;
+  text-decoration: none;
+}
+
 .btn-link {
   display: inline-block;
   margin-top: 2rem;

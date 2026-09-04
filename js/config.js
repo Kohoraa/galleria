@@ -16,7 +16,8 @@ const GOOGLE_CONFIG = {
 // Vapaaehtoinen tuki joukkueelle (ei pakollinen, mainitaan hillitysti)
 const MOBILEPAY_CONFIG = {
   teamName: "Fortuna U18",
-  code: "VAIHDA_TAHAN_MOBILEPAY_KOODI"
+  recipientName: "Fortuna ry",
+  code: "1502AQ"
 };
 
 // Sallitut sähköpostit ja Cloudinary/GitHub-salaisuudet asetetaan

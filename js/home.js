@@ -53,7 +53,7 @@
       const img = document.createElement("img");
       img.src = thumbUrl(photo.public_id, photo.format);
       img.loading = "lazy";
-     img.alt = `${game.title || "Ottelu"}`;
+      img.alt = `${game.title || "Ottelu"}`;
       imgWrap.appendChild(img);
     }
     const logo = clubLogoFor(game.laji);
@@ -76,6 +76,17 @@
     card.appendChild(body);
 
     cardsContainer.appendChild(card);
+  }
+
+  function renderPromoCard() {
+    const card = document.createElement("div");
+    card.className = "latest-promo-card";
+    card.innerHTML = `
+      <h3>Haluatko jonkin kuvan omaksesi?</h3>
+      <p>Pyydä alkuperäistiedosto tai käyttölupa mihin tahansa julkaistuun kuvaan — se käy sukkelaan tästä tai jokaisen kuvan luota löytyvästä linkistä.</p>
+      <a class="btn-solid" href="yhteydenotto.html?aihe=Kuvapyynt%C3%B6">Pyydä kuva →</a>
+    `;
+    return card;
   }
 
   async function init() {
@@ -105,6 +116,10 @@
           heroSet = true;
         }
       }
+
+      // Kuvapyyntölaatikko toiseksi elementiksi ruudukkoon (ensimmäisen kortin jälkeen)
+      const promo = renderPromoCard();
+      cardsContainer.insertBefore(promo, cardsContainer.children[1] || null);
     } catch (err) {
       cardsContainer.innerHTML = '<p class="empty-state">Otteluita ei voitu ladata juuri nyt.</p>';
       console.error(err);
