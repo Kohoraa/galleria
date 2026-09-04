@@ -100,7 +100,7 @@
   (function () {
     if (typeof MOBILEPAY_CONFIG !== "undefined" && !MOBILEPAY_CONFIG.code.startsWith("VAIHDA")) {
       document.getElementById("mobilepay-note").textContent =
-        `Halutessasi voit tukea ${MOBILEPAY_CONFIG.teamName} -joukkuetta MobilePaylla: ${MOBILEPAY_CONFIG.code}`;
+        `Kuvat ovat ilmaisia mutta halutessasi voit tukea ${MOBILEPAY_CONFIG.teamName} -joukkuetta muutamalla eurolla MobilePaylla (vastaanottaja ${MOBILEPAY_CONFIG.recipientName}): ${MOBILEPAY_CONFIG.code}`;
     }
   })();
 </script>
