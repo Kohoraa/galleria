@@ -37,7 +37,7 @@
   function buildMessage(pageUrl, game) {
     const mobilepayLine =
       typeof MOBILEPAY_CONFIG !== "undefined" && !MOBILEPAY_CONFIG.code.startsWith("VAIHDA")
-        ? `\n\nJos haluat, voit tukea ${MOBILEPAY_CONFIG.teamName} -joukkuetta MobilePaylla (vastaanottaja ${MOBILEPAY_CONFIG.recipientName}): ${MOBILEPAY_CONFIG.code}`
+        ? `\n\nKuvat ovat ilmaisia, mutta jos haluat, voit tukea ${MOBILEPAY_CONFIG.teamName} -joukkuetta muutamalla eurolla MobilePaylla (vastaanottaja ${MOBILEPAY_CONFIG.recipientName}): ${MOBILEPAY_CONFIG.code}`
         : "";
 
     return `Hei!
