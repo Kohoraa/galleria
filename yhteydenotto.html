@@ -126,7 +126,7 @@
       return d.toLocaleDateString("fi-FI", { day: "numeric", month: "long", year: "numeric" });
     }
 
-    fetch("games.json")
+       fetch("games.json")
       .then((res) => res.json())
       .then((games) => {
         games.sort((a, b) => (a.date < b.date ? 1 : -1));
@@ -143,6 +143,29 @@
           const match = Array.from(gameSelect.options).find((o) => o.value === peli);
           if (match) gameSelect.value = peli;
         }
+
+        // Jos asiakas vaihtaa ottelua pudotusvalikosta lennosta, päivitetään
+        // viestin alkuosa vastaamaan uutta valintaa — mutta vain jos viesti on
+        // yhä se automaattisesti täytetty teksti, ei koskaan käyttäjän omaa tekstiä.
+        const introPattern = /^Minua kiinnostaisi saada kuvat ottelusta:.*\n\(tunniste:.*\)/;
+
+        gameSelect.addEventListener("change", () => {
+          const selected = games.find((g) => g.tag === gameSelect.value);
+          if (!selected) return;
+
+          const message = document.getElementById("contact-message");
+          const newIntro = `Minua kiinnostaisi saada kuvat ottelusta: ${selected.title || "Ottelu"}, ${formatDate(selected.date)}\n(tunniste: ${selected.tag})`;
+
+          if (introPattern.test(message.value)) {
+            message.value = message.value.replace(introPattern, newIntro);
+          } else if (message.value.trim() === "") {
+            message.value = newIntro + "\n\n";
+            message.focus();
+            message.setSelectionRange(message.value.length, message.value.length);
+          }
+          // Jos viesti ei täsmää kumpaankaan, käyttäjä on kirjoittanut oman
+          // tekstinsä kokonaan alusta — sitä ei kosketa.
+        });
       })
       .catch(() => {
         gameSelect.innerHTML = '<option value="">Otteluita ei voitu ladata</option>';
