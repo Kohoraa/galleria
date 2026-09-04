@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Lataa kuvat — Kohoraa</title>
+<meta name="description" content="Ottelun kuvat ladattavaksi." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/style.css" />
+<link rel="icon" href="assets/logo.png" />
+<style>
+  .download-header { max-width: 60rem; margin: 2rem auto 0; padding: 0 1.5rem; }
+  .download-header .eyebrow { font-family: var(--font-mono); font-size: 0.75rem; color: var(--yellow); text-transform: uppercase; letter-spacing: 0.1em; margin: 0; }
+  .download-header h1 { font-family: var(--font-display); text-transform: uppercase; font-size: clamp(1.8rem, 5vw, 2.6rem); margin: 0.4rem 0; line-height: 1.05; }
+  .download-header p { font-family: var(--font-body); color: var(--frost); max-width: 40rem; margin: 0.5rem 0 0; }
+
+  .download-grid {
+    max-width: 60rem; margin: 2rem auto 3rem; padding: 0 1.5rem;
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 1rem;
+  }
+  .download-item {
+    background: var(--navy-soft); border-radius: 4px; overflow: hidden;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.4); display: flex; flex-direction: column;
+  }
+  .download-item img { width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block; }
+  .download-item a.dl-link {
+    display: block; text-align: center; padding: 0.55rem 0.5rem;
+    font-family: var(--font-mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.03em;
+    background: var(--yellow); color: var(--navy); text-decoration: none;
+  }
+  .download-item a.dl-link:hover { filter: brightness(1.08); }
+</style>
+</head>
+<body>
+
+<div class="top-bar"></div>
+
+<header class="site-nav">
+  <div class="nav-brand">
+    <img src="assets/logo.png" alt="Kohoraa" class="team-mark-small" />
+    <span class="brand-word">Kohoraa</span>
+  </div>
+  <nav class="header-nav">
+    <a href="/">Etusivu</a>
+    <a href="ottelut.html">Ottelut</a>
+    <a href="yhteydenotto.html">Yhteydenotto</a>
+  </nav>
+</header>
+
+<div class="download-header">
+  <p class="eyebrow">Kuvapyyntö</p>
+  <h1 id="game-title">Ladataan…</h1>
+  <p>Klikkaa kuvaa ladataksesi sen alkuperäisenä, ilman vesileimaa. Jokainen kuva ladataan erikseen.</p>
+</div>
+
+<div class="download-grid" id="download-grid">
+  <p class="loading-state">Ladataan kuvia…</p>
+</div>
+
+<footer class="site-footer">
+  <div class="club-strip">
+    <span class="club-strip-label">Kuvaan otteluita seuroille</span>
+    <img src="assets/logo-jaakiekko.png" alt="Kohoraa" />
+    <img src="assets/logo-tuisku.png" alt="Tuisku Orivesi" />
+  </div>
+  <p>© Kohoraa <span id="copyright-year"></span>. Kuvat ovat tekijänoikeuden alaisia. Kuvien käyttöön muualla tai poistopyyntöihin: <a href="yhteydenotto.html">ota yhteyttä</a>.</p>
+</footer>
+
+<script src="js/config.js"></script>
+<script>document.getElementById("copyright-year").textContent = new Date().getFullYear();</script>
+<script>
+  (function () {
+    const grid = document.getElementById("download-grid");
+    const titleEl = document.getElementById("game-title");
+
+    function downloadUrl(publicId, format) {
+      return `https://res.cloudinary.com/${CLOUDINARY_CONFIG.cloudName}/image/upload/fl_attachment/${publicId}.${format}`;
+    }
+
+    function thumbUrl(publicId, format) {
+      return `https://res.cloudinary.com/${CLOUDINARY_CONFIG.cloudName}/image/upload/w_400,h_300,c_fill,q_auto,f_auto/${publicId}.${format}`;
+    }
+
+    function formatDate(iso) {
+      const d = new Date(iso + "T00:00:00");
+      if (isNaN(d)) return iso;
+      return d.toLocaleDateString("fi-FI", { day: "numeric", month: "long", year: "numeric" });
+    }
+
+    async function init() {
+      const params = new URLSearchParams(window.location.search);
+      const tag = params.get("peli");
+
+      if (!tag) {
+        titleEl.textContent = "Ottelua ei löytynyt";
+        grid.innerHTML = "";
+        const msg = document.createElement("p");
+        msg.className = "empty-state";
+        msg.textContent = "Linkistä puuttuu ottelun tunniste.";
+        grid.appendChild(msg);
+        return;
+      }
+
+      try {
+        const gamesRes = await fetch("games.json");
+        const games = await gamesRes.json();
+        const game = games.find((g) => g.tag === tag);
+
+        titleEl.textContent = game ? `${game.title || "Ottelu"}` : "Ottelu";
+        if (game) {
+          const dateP = document.createElement("p");
+          dateP.style.fontFamily = "var(--font-mono)";
+          dateP.style.fontSize = "0.75rem";
+          dateP.style.color = "var(--frost-dim)";
+          dateP.textContent = formatDate(game.date);
+          titleEl.insertAdjacentElement("afterend", dateP);
+        }
+
+        const listUrl = `https://res.cloudinary.com/${CLOUDINARY_CONFIG.cloudName}/image/list/${encodeURIComponent(tag)}.json`;
+        const listRes = await fetch(listUrl);
+        if (!listRes.ok) throw new Error("Kuvia ei löytynyt");
+        const data = await listRes.json();
+        const resources = data.resources || [];
+
+        grid.innerHTML = "";
+
+        if (!resources.length) {
+          const empty = document.createElement("p");
+          empty.className = "empty-state";
+          empty.textContent = "Tälle ottelulle ei löytynyt kuvia.";
+          grid.appendChild(empty);
+          return;
+        }
+
+        resources.forEach((r, i) => {
+          const item = document.createElement("div");
+          item.className = "download-item";
+
+          const img = document.createElement("img");
+          img.src = thumbUrl(r.public_id, r.format);
+          img.loading = "lazy";
+          img.alt = `Kuva ${i + 1}`;
+          item.appendChild(img);
+
+          const link = document.createElement("a");
+          link.className = "dl-link";
+          link.href = downloadUrl(r.public_id, r.format);
+          link.textContent = `Lataa (${i + 1})`;
+          item.appendChild(link);
+
+          grid.appendChild(item);
+        });
+      } catch (err) {
+        titleEl.textContent = "Jotain meni pieleen";
+        grid.innerHTML = "";
+        const errMsg = document.createElement("p");
+        errMsg.className = "empty-state";
+        errMsg.textContent = "Kuvia ei voitu ladata juuri nyt.";
+        grid.appendChild(errMsg);
+        console.error(err);
+      }
+    }
+
+    init();
+  })();
+</script>
+</body>
+</html>

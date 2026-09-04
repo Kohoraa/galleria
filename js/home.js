@@ -68,11 +68,20 @@
 
     const body = document.createElement("div");
     body.className = "latest-card-body";
-    body.innerHTML = `
-      <span class="latest-card-sport">${capitalize(game.laji) || "Ottelu"}</span>
-      <h3 class="latest-card-title">${game.title || "Ottelu"}</h3>
-      <span class="latest-card-date">${formatDate(game.date)}</span>
-    `;
+    const sportSpan = document.createElement("span");
+    sportSpan.className = "latest-card-sport";
+    sportSpan.textContent = capitalize(game.laji) || "Ottelu";
+    body.appendChild(sportSpan);
+
+    const titleH3 = document.createElement("h3");
+    titleH3.className = "latest-card-title";
+    titleH3.textContent = game.title || "Ottelu";
+    body.appendChild(titleH3);
+
+    const dateSpan = document.createElement("span");
+    dateSpan.className = "latest-card-date";
+    dateSpan.textContent = formatDate(game.date);
+    body.appendChild(dateSpan);
     card.appendChild(body);
 
     cardsContainer.appendChild(card);

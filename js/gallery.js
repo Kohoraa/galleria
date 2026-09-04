@@ -214,13 +214,35 @@
     const meta = document.createElement("div");
     meta.className = "game-meta";
     const logo = clubLogoFor(game.laji);
-    meta.innerHTML = `
-      ${logo ? `<img class="club-logo" src="${logo.src}" alt="${logo.alt}" />` : ""}
-      <span class="game-number">${capitalize(game.laji) || "Ottelu"} ${number}</span>
-      <span class="game-date">${formatDate(game.date)}</span>
-      <h2 class="game-title">${game.title || "Ottelu"}</h2>
-      ${game.venue ? `<span class="game-venue">${game.venue}</span>` : ""}
-    `;
+    if (logo) {
+      const logoImg = document.createElement("img");
+      logoImg.className = "club-logo";
+      logoImg.src = logo.src;
+      logoImg.alt = logo.alt;
+      meta.appendChild(logoImg);
+    }
+
+    const numberSpan = document.createElement("span");
+    numberSpan.className = "game-number";
+    numberSpan.textContent = `${capitalize(game.laji) || "Ottelu"} ${number}`;
+    meta.appendChild(numberSpan);
+
+    const dateSpan = document.createElement("span");
+    dateSpan.className = "game-date";
+    dateSpan.textContent = formatDate(game.date);
+    meta.appendChild(dateSpan);
+
+    const titleH2 = document.createElement("h2");
+    titleH2.className = "game-title";
+    titleH2.textContent = game.title || "Ottelu";
+    meta.appendChild(titleH2);
+
+    if (game.venue) {
+      const venueSpan = document.createElement("span");
+      venueSpan.className = "game-venue";
+      venueSpan.textContent = game.venue;
+      meta.appendChild(venueSpan);
+    }
     section.appendChild(meta);
 
     if (game.raportti) {

@@ -16,13 +16,6 @@
     return d.toLocaleDateString("fi-FI", { day: "numeric", month: "long", year: "numeric" });
   }
 
-  // Pakottaa selaimen lataamaan tiedoston sen sijaan että se yrittäisi
-  // näyttää sen. Ei vaadi allekirjoitusta, koska kuva on jo julkisesti
-  // saatavilla (sama periaate kuin galleria käyttää).
-  function downloadUrl(publicId, format) {
-    return `https://res.cloudinary.com/${CLOUDINARY_CONFIG.cloudName}/image/upload/fl_attachment/${publicId}.${format}`;
-  }
-
   async function loadGameList() {
     try {
       const res = await fetch("games.json");
@@ -41,29 +34,19 @@
     }
   }
 
-  async function loadGamePhotos(tag) {
-    const url = `https://res.cloudinary.com/${CLOUDINARY_CONFIG.cloudName}/image/list/${encodeURIComponent(tag)}.json`;
-    const res = await fetch(url);
-    if (!res.ok) throw new Error("Kuvia ei löytynyt tälle ottelulle");
-    const data = await res.json();
-    return data.resources || [];
-  }
-
-  function buildMessage(urls, game) {
+  function buildMessage(pageUrl, game) {
     const mobilepayLine =
       typeof MOBILEPAY_CONFIG !== "undefined" && !MOBILEPAY_CONFIG.code.startsWith("VAIHDA")
         ? `\n\nKuvat ovat ilmaisia, mutta jos haluat, voit tukea ${MOBILEPAY_CONFIG.teamName} -joukkuetta muutamalla eurolla MobilePaylla (vastaanottaja ${MOBILEPAY_CONFIG.recipientName}): ${MOBILEPAY_CONFIG.code}`
         : "";
 
-    const linkLines = urls.map((u, i) => `${i + 1}. ${u}`).join("\n");
-
     return `Hei!
 
-Tässä pyytämäsi kuvat (${game.title || "Ottelu"}, ${formatDate(game.date)}) — ${urls.length} kpl, alkuperäisessä muodossa ilman vesileimaa:
+Tässä linkki pyytämiisi kuviin (${game.title || "Ottelu"}, ${formatDate(game.date)}) — alkuperäisessä muodossa, ilman vesileimaa:
 
-${linkLines}
+${pageUrl}
 
-Jokainen linkki lataa yhden kuvan.${mobilepayLine}
+Klikkaa haluamasi kuvat auki, jokainen ladataan erikseen.${mobilepayLine}
 
 Terveisin`;
   }
@@ -76,42 +59,25 @@ Terveisin`;
 
     errorBox.style.display = "none";
     resultBox.style.display = "none";
-    generateBtn.disabled = true;
-    generateBtn.textContent = "Haetaan kuvia…";
 
-    try {
-      const resources = await loadGamePhotos(tag);
-      if (!resources.length) {
-        throw new Error("Tälle ottelulle ei löytynyt yhtään kuvaa");
-      }
+    const pageUrl = `${window.location.origin}/lataa.html?peli=${encodeURIComponent(tag)}`;
 
-      const urls = resources.map((r) => downloadUrl(r.public_id, r.format));
+    linkListEl.innerHTML = "";
+    const row = document.createElement("div");
+    row.className = "link-row";
+    row.innerHTML = `<a href="${pageUrl}" target="_blank" rel="noopener">${pageUrl}</a>`;
+    linkListEl.appendChild(row);
 
-      linkListEl.innerHTML = "";
-      urls.forEach((u, i) => {
-        const row = document.createElement("div");
-        row.className = "link-row";
-        row.innerHTML = `<a href="${u}" target="_blank" rel="noopener">Kuva ${i + 1}</a>`;
-        linkListEl.appendChild(row);
-      });
-
-      messageText.textContent = buildMessage(urls, game);
-      resultBox.style.display = "block";
-      resultBox.scrollIntoView({ behavior: "smooth", block: "start" });
-    } catch (err) {
-      errorBox.textContent = err.message;
-      errorBox.style.display = "block";
-    } finally {
-      generateBtn.disabled = false;
-      generateBtn.textContent = "Luo latauslinkit";
-    }
+    messageText.textContent = buildMessage(pageUrl, game);
+    resultBox.style.display = "block";
+    resultBox.scrollIntoView({ behavior: "smooth", block: "start" });
   });
 
   copyAllBtn.addEventListener("click", () => {
     const links = Array.from(linkListEl.querySelectorAll("a")).map((a) => a.href);
     navigator.clipboard.writeText(links.join("\n")).then(() => {
       copyAllBtn.textContent = "Kopioitu ✓";
-      setTimeout(() => (copyAllBtn.textContent = "Kopioi kaikki linkit"), 1500);
+      setTimeout(() => (copyAllBtn.textContent = "Kopioi linkki"), 1500);
     });
   });
 
