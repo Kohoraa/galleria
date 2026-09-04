@@ -40,7 +40,15 @@
     selectedFiles.forEach((f) => {
       const row = document.createElement("div");
       row.dataset.name = f.name;
-      row.innerHTML = `<span>${f.name}</span><span class="status" data-status>odottaa</span>`;
+      const nameSpan = document.createElement("span");
+      nameSpan.textContent = f.name;
+
+      const statusSpan = document.createElement("span");
+      statusSpan.className = "status";
+      statusSpan.dataset.status = "";
+      statusSpan.textContent = "odottaa";
+
+      row.append(nameSpan, statusSpan);
       fileListEl.appendChild(row);
     });
     uploadBtn.disabled = selectedFiles.length === 0;
