@@ -31,6 +31,30 @@
     background: var(--yellow); color: var(--navy); text-decoration: none;
   }
   .download-item a.dl-link:hover { filter: brightness(1.08); }
+
+  .mobilepay-card {
+    background: linear-gradient(135deg, rgba(242, 194, 48, 0.16), rgba(242, 194, 48, 0.05));
+    border: 1px solid rgba(242, 194, 48, 0.35);
+    border-radius: 4px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.4);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    aspect-ratio: 4/3;
+    padding: 1rem 0.9rem;
+    gap: 0.35rem;
+  }
+  .mobilepay-card .mp-heart { font-size: 1.4rem; margin-bottom: 0.1rem; }
+  .mobilepay-card p {
+    font-family: var(--font-body); font-size: 0.72rem; color: var(--frost);
+    margin: 0; line-height: 1.35;
+  }
+  .mobilepay-card .mp-code {
+    font-family: var(--font-mono); font-size: 0.85rem; font-weight: 600;
+    color: var(--yellow); margin-top: 0.2rem;
+  }
 </style>
 </head>
 <body>
@@ -152,6 +176,18 @@
 
           grid.appendChild(item);
         });
+
+        if (typeof MOBILEPAY_CONFIG !== "undefined" && !MOBILEPAY_CONFIG.code.startsWith("VAIHDA")) {
+          const mp = document.createElement("div");
+          mp.className = "mobilepay-card";
+          mp.innerHTML = `
+            <span class="mp-heart">❤️</span>
+                        <p>Piditkö kuvista? Voit halutessasi tukea ${MOBILEPAY_CONFIG.teamName} -joukkuetta MobilePaylla</p>
+            <span class="mp-code">${MOBILEPAY_CONFIG.code}</span>
+            <p>(vastaanottaja ${MOBILEPAY_CONFIG.recipientName})</p>
+          `;
+          grid.appendChild(mp);
+        }
       } catch (err) {
         titleEl.textContent = "Jotain meni pieleen";
         grid.innerHTML = "";
