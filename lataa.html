@@ -104,7 +104,7 @@
     }
 
     function thumbUrl(publicId, format) {
-      return `https://res.cloudinary.com/${CLOUDINARY_CONFIG.cloudName}/image/upload/w_400,h_300,c_fill,q_auto,f_auto/${publicId}.${format}`;
+      return `https://res.cloudinary.com/${CLOUDINARY_CONFIG.cloudName}/image/upload/w_400,h_300,c_fill,g_auto,q_auto,f_auto/${publicId}.${format}`;
     }
 
     function formatDate(iso) {

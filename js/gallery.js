@@ -367,7 +367,7 @@
 
         if (!heroSet && resources.length && heroEl) {
           const hero = resources[0];
-          const heroUrl = `https://res.cloudinary.com/${CLOUDINARY_CONFIG.cloudName}/image/upload/w_1600,h_1000,c_fill,q_auto,f_auto/${hero.public_id}.${hero.format}`;
+          const heroUrl = `https://res.cloudinary.com/${CLOUDINARY_CONFIG.cloudName}/image/upload/w_1600,h_1000,c_fill,g_auto,q_auto,f_auto/${hero.public_id}.${hero.format}`;
           heroEl.style.backgroundImage = `url("${heroUrl}")`;
           heroSet = true;
         }
