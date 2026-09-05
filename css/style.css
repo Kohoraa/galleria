@@ -495,6 +495,34 @@ img {
   color: var(--navy);
 }
 
+.jump-select-wrap {
+  max-width: 76rem;
+  margin: 0 auto;
+  padding: 1rem 1.5rem 1.5rem;
+}
+
+.jump-select-wrap label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--frost-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.4rem;
+}
+
+.jump-select {
+  max-width: 26rem;
+  width: 100%;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  background: var(--navy-soft);
+  color: var(--ice);
+  border: 1px solid rgba(196, 190, 170, 0.25);
+  border-radius: 4px;
+  padding: 0.6rem 0.8rem;
+}
+
 .game-report {
   color: var(--frost);
   font-size: 0.95rem;
