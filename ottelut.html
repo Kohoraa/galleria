@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Ottelukuvat</title>
+<title>Ottelut</title>
 <meta name="description" content="Jääkiekko-ottelukuvia kaudelta." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -33,7 +33,7 @@
 <section class="hero" id="hero">
   <div class="hero-content">
     <p class="eyebrow">Kausi 2026–2027</p>
-    <h1 class="hero-title">Ottelukuvat</h1>
+    <h1 class="hero-title">Ottelut</h1>
     <p class="hero-subtitle">Räpsyjä kenttien laidalta.</p>
   </div>
 </section>
@@ -41,6 +41,13 @@
 <hr class="rink-divider" />
 
 <div class="sport-filter" id="sport-filter"></div>
+
+<div class="jump-select-wrap" id="jump-select-wrap" style="display:none">
+  <label for="jump-select">Siirry otteluun</label>
+  <select class="jump-select" id="jump-select">
+    <option value="">Valitse ottelu…</option>
+  </select>
+</div>
 
 <main class="games" id="games"></main>
 
