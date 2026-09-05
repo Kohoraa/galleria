@@ -289,6 +289,36 @@
     gamesContainer.appendChild(divider);
   }
 
+  function renderJumpMenu(filtered) {
+    const wrap = document.getElementById("jump-select-wrap");
+    const select = document.getElementById("jump-select");
+    if (!wrap || !select) return;
+
+    if (filtered.length < 2) {
+      wrap.style.display = "none";
+      return;
+    }
+
+    wrap.style.display = "block";
+    select.innerHTML = '<option value="">Valitse ottelu…</option>';
+    filtered.forEach((game) => {
+      const opt = document.createElement("option");
+      opt.value = game.tag;
+      opt.textContent = `${formatDate(game.date)} — ${game.title || "Ottelu"}`;
+      select.appendChild(opt);
+    });
+  }
+
+  document.addEventListener("change", (e) => {
+    if (e.target && e.target.id === "jump-select") {
+      const tag = e.target.value;
+      if (!tag) return;
+      const el = document.getElementById(`ottelu-${tag}`);
+      if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+      e.target.value = "";
+    }
+  });
+
   function renderGames() {
     gamesContainer.innerHTML = "";
 
@@ -296,6 +326,8 @@
       activeSport === "kaikki"
         ? loadedGames
         : loadedGames.filter((g) => (g.laji || "").toLowerCase() === activeSport);
+
+    renderJumpMenu(filtered);
 
     if (!filtered.length) {
       gamesContainer.innerHTML = '<p class="empty-state">Ei otteluita tällä suodattimella.</p>';
