@@ -4,11 +4,11 @@
   const MAX_CARDS = 6;
 
   function thumbUrl(publicId, format) {
-    return `https://res.cloudinary.com/${CLOUDINARY_CONFIG.cloudName}/image/upload/w_600,h_450,c_fill,q_auto,f_auto/${publicId}.${format}`;
+      return `https://res.cloudinary.com/${CLOUDINARY_CONFIG.cloudName}/image/upload/w_600,h_450,c_fill,g_auto,q_auto,f_auto/${publicId}.${format}`;
   }
 
   function heroImgUrl(publicId, format) {
-    return `https://res.cloudinary.com/${CLOUDINARY_CONFIG.cloudName}/image/upload/w_1600,h_1000,c_fill,q_auto,f_auto/${publicId}.${format}`;
+      return `https://res.cloudinary.com/${CLOUDINARY_CONFIG.cloudName}/image/upload/w_1600,h_1000,c_fill,g_auto,q_auto,f_auto/${publicId}.${format}`;
   }
 
   function formatDate(iso) {
