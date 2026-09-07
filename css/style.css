@@ -595,6 +595,7 @@ img {
 
 .game {
   padding: 2.5rem 0;
+  scroll-margin-top: var(--sticky-offset, 180px);
 }
 
 .game-meta {
