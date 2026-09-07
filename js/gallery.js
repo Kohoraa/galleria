@@ -323,6 +323,16 @@
   const nowViewingEl = document.getElementById("now-viewing");
   const stickyBar = document.getElementById("ottelu-nav-sticky");
 
+  // Mitataan tarttuvan palkin todellinen korkeus, jotta vieritys otteluun
+  // jättää juuri sen verran tilaa ettei otsikko jää palkin alle piiloon.
+  function updateStickyOffset() {
+    if (!stickyBar) return;
+    const height = stickyBar.getBoundingClientRect().height;
+    document.documentElement.style.setProperty("--sticky-offset", `${height + 16}px`);
+  }
+
+  window.addEventListener("resize", updateStickyOffset, { passive: true });
+
   function updateNowViewing() {
     if (!nowViewingEl) return;
     const sections = Array.from(gamesContainer.querySelectorAll(".game"));
@@ -369,6 +379,7 @@
     }
 
     filtered.forEach((game, i) => renderGame(game, i, filtered.length));
+    updateStickyOffset();
     updateNowViewing();
   }
 
@@ -437,6 +448,7 @@
 
       renderFilterBar(sports);
       renderJumpMenu(loadedGames);
+      updateStickyOffset();
       updateNowViewing();
     } catch (err) {
       gamesContainer.innerHTML = '<p class="empty-state">Otteluita ei voitu ladata juuri nyt.</p>';
