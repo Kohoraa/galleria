@@ -495,10 +495,30 @@ img {
   color: var(--navy);
 }
 
+.ottelu-nav-sticky {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: var(--navy);
+  border-bottom: 1px solid rgba(196, 190, 170, 0.12);
+}
+
 .jump-select-wrap {
   max-width: 76rem;
   margin: 0 auto;
   padding: 1rem 1.5rem 1.5rem;
+}
+
+.now-viewing {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--frost-dim);
+  margin: 0 0 0.4rem;
+}
+
+.now-viewing b {
+  color: var(--yellow);
+  font-weight: 500;
 }
 
 .jump-select-wrap label {
