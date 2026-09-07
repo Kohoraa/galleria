@@ -319,6 +319,50 @@
     }
   });
 
+  // Näyttää tarttuvassa palkissa minkä ottelun kohdalla ollaan parhaillaan.
+  const nowViewingEl = document.getElementById("now-viewing");
+  const stickyBar = document.getElementById("ottelu-nav-sticky");
+
+  // Mitataan tarttuvan palkin todellinen korkeus, jotta vieritys otteluun
+  // jättää juuri sen verran tilaa ettei otsikko jää palkin alle piiloon.
+  function updateStickyOffset() {
+    if (!stickyBar) return;
+    const height = stickyBar.getBoundingClientRect().height;
+    document.documentElement.style.setProperty("--sticky-offset", `${height + 16}px`);
+  }
+
+  window.addEventListener("resize", updateStickyOffset, { passive: true });
+
+  function updateNowViewing() {
+    if (!nowViewingEl) return;
+    const sections = Array.from(gamesContainer.querySelectorAll(".game"));
+    if (!sections.length) {
+      nowViewingEl.textContent = "";
+      return;
+    }
+
+    const barHeight = stickyBar ? stickyBar.getBoundingClientRect().height : 0;
+    const threshold = barHeight + 20;
+
+    let current = sections[0];
+    for (const s of sections) {
+      if (s.getBoundingClientRect().top <= threshold) {
+        current = s;
+      } else {
+        break;
+      }
+    }
+
+    const titleEl = current.querySelector(".game-title");
+    nowViewingEl.textContent = "";
+    nowViewingEl.appendChild(document.createTextNode("Katsot nyt: "));
+    const b = document.createElement("b");
+    b.textContent = titleEl ? titleEl.textContent : "";
+    nowViewingEl.appendChild(b);
+  }
+
+  window.addEventListener("scroll", updateNowViewing, { passive: true });
+
   function renderGames() {
     gamesContainer.innerHTML = "";
 
@@ -335,6 +379,8 @@
     }
 
     filtered.forEach((game, i) => renderGame(game, i, filtered.length));
+    updateStickyOffset();
+    updateNowViewing();
   }
 
   async function init() {
@@ -402,6 +448,8 @@
 
       renderFilterBar(sports);
       renderJumpMenu(loadedGames);
+      updateStickyOffset();
+      updateNowViewing();
     } catch (err) {
       gamesContainer.innerHTML = '<p class="empty-state">Otteluita ei voitu ladata juuri nyt.</p>';
       console.error(err);
