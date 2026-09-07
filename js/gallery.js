@@ -355,7 +355,16 @@
       const heroEl = document.getElementById("hero");
       let heroSet = false;
 
+      // Jos linkki osoittaa tiettyyn otteluun (esim. lightboxin "pyydä kuva"
+      // -linkistä), vieritetään sinne heti kun JUURI se ottelu on renderöity
+      // — ei tarvitse odottaa kaikkien otteluiden latautumista.
+      const targetHash = window.location.hash ? window.location.hash.slice(1) : null;
+      let scrolledToTarget = false;
+
+      gamesContainer.innerHTML = "";
       loadedGames = [];
+      let renderedCount = 0;
+
       for (const game of games) {
         let resources = [];
         try {
@@ -363,7 +372,21 @@
         } catch (err) {
           resources = [];
         }
-        loadedGames.push(Object.assign({}, game, { resources }));
+        const fullGame = Object.assign({}, game, { resources });
+        loadedGames.push(fullGame);
+
+        // Oletussuodatin on aina "kaikki" ensilatauksella, joten piirretään
+        // jokainen ottelu heti sitä mukaa kun sen kuvat ovat valmiit.
+        renderGame(fullGame, renderedCount, games.length);
+        renderedCount++;
+
+        if (!scrolledToTarget && targetHash && `ottelu-${game.tag}` === targetHash) {
+          scrolledToTarget = true;
+          requestAnimationFrame(() => {
+            const el = document.getElementById(targetHash);
+            if (el) el.scrollIntoView({ behavior: "auto", block: "start" });
+          });
+        }
 
         if (!heroSet && resources.length && heroEl) {
           const hero = resources[0];
@@ -378,7 +401,7 @@
       ).sort();
 
       renderFilterBar(sports);
-      renderGames();
+      renderJumpMenu(loadedGames);
     } catch (err) {
       gamesContainer.innerHTML = '<p class="empty-state">Otteluita ei voitu ladata juuri nyt.</p>';
       console.error(err);
