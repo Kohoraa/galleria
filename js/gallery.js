@@ -319,6 +319,40 @@
     }
   });
 
+  // Näyttää tarttuvassa palkissa minkä ottelun kohdalla ollaan parhaillaan.
+  const nowViewingEl = document.getElementById("now-viewing");
+  const stickyBar = document.getElementById("ottelu-nav-sticky");
+
+  function updateNowViewing() {
+    if (!nowViewingEl) return;
+    const sections = Array.from(gamesContainer.querySelectorAll(".game"));
+    if (!sections.length) {
+      nowViewingEl.textContent = "";
+      return;
+    }
+
+    const barHeight = stickyBar ? stickyBar.getBoundingClientRect().height : 0;
+    const threshold = barHeight + 20;
+
+    let current = sections[0];
+    for (const s of sections) {
+      if (s.getBoundingClientRect().top <= threshold) {
+        current = s;
+      } else {
+        break;
+      }
+    }
+
+    const titleEl = current.querySelector(".game-title");
+    nowViewingEl.textContent = "";
+    nowViewingEl.appendChild(document.createTextNode("Katsot nyt: "));
+    const b = document.createElement("b");
+    b.textContent = titleEl ? titleEl.textContent : "";
+    nowViewingEl.appendChild(b);
+  }
+
+  window.addEventListener("scroll", updateNowViewing, { passive: true });
+
   function renderGames() {
     gamesContainer.innerHTML = "";
 
@@ -335,6 +369,7 @@
     }
 
     filtered.forEach((game, i) => renderGame(game, i, filtered.length));
+    updateNowViewing();
   }
 
   async function init() {
@@ -402,6 +437,7 @@
 
       renderFilterBar(sports);
       renderJumpMenu(loadedGames);
+      updateNowViewing();
     } catch (err) {
       gamesContainer.innerHTML = '<p class="empty-state">Otteluita ei voitu ladata juuri nyt.</p>';
       console.error(err);
