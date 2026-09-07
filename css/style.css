@@ -494,13 +494,36 @@ img {
   border-color: var(--yellow);
   color: var(--navy);
 }
-
 .ottelu-nav-sticky {
   position: sticky;
   top: 0;
   z-index: 40;
   background: var(--navy);
   border-bottom: 1px solid rgba(196, 190, 170, 0.12);
+}
+
+.sticky-page-nav {
+  display: flex;
+  gap: 1.25rem;
+  padding: 0.6rem 1.5rem;
+  border-bottom: 1px solid rgba(196, 190, 170, 0.1);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.sticky-page-nav a {
+  color: var(--frost-dim);
+  text-decoration: none;
+}
+
+.sticky-page-nav a:hover {
+  color: var(--frost);
+}
+
+.sticky-page-nav a[aria-current] {
+  color: var(--yellow);
 }
 
 .jump-select-wrap {
