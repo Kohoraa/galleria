@@ -891,7 +891,26 @@ input:focus-visible {
   padding: 0.3rem 0;
   border-bottom: 1px solid rgba(184, 196, 204, 0.1);
 }
+.file-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.4rem 0;
+}
 
+.cover-radio-label {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--frost-dim);
+  white-space: nowrap;
+}
+
+.cover-radio-label:has(input:checked) {
+  color: var(--yellow);
+}
 .status-ok {
   color: #6bcf9e;
 }
