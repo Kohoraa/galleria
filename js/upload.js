@@ -12,6 +12,7 @@
 
   let selectedFiles = [];
   let isSubmitting = false;
+  let coverIndex = 0;
 
   const sportSelect = document.getElementById("game-sport");
   const sportOtherGroup = document.getElementById("game-sport-other-group");
@@ -37,9 +38,24 @@
 
   function renderFileList() {
     fileListEl.innerHTML = "";
-    selectedFiles.forEach((f) => {
+    selectedFiles.forEach((f, i) => {
       const row = document.createElement("div");
+      row.className = "file-row";
       row.dataset.name = f.name;
+
+      const radio = document.createElement("input");
+      radio.type = "radio";
+      radio.name = "cover-choice";
+      radio.className = "cover-radio";
+      radio.checked = i === coverIndex;
+      radio.addEventListener("change", () => {
+        coverIndex = i;
+      });
+
+      const radioLabel = document.createElement("label");
+      radioLabel.className = "cover-radio-label";
+      radioLabel.append(radio, document.createTextNode(" Kansikuva"));
+
       const nameSpan = document.createElement("span");
       nameSpan.textContent = f.name;
 
@@ -48,10 +64,19 @@
       statusSpan.dataset.status = "";
       statusSpan.textContent = "odottaa";
 
-      row.append(nameSpan, statusSpan);
+      row.append(radioLabel, nameSpan, statusSpan);
       fileListEl.appendChild(row);
     });
     uploadBtn.disabled = selectedFiles.length === 0;
+  }
+
+  function addFiles(fileArray) {
+    const wasEmpty = selectedFiles.length === 0;
+    selectedFiles = selectedFiles.concat(
+      fileArray.filter((f) => f.type.startsWith("image/"))
+    );
+    if (wasEmpty) coverIndex = 0;
+    renderFileList();
   }
 
   function addFiles(fileArray) {
@@ -155,15 +180,18 @@
 
     uploadBtn.textContent = "Ladataan…";
     let successCount = 0;
+    const uploadResults = [];
 
     for (const file of selectedFiles) {
       setStatus(file.name, "ladataan…", true);
       try {
-        await uploadOne(file, tag, sig);
+        const data = await uploadOne(file, tag, sig);
         setStatus(file.name, "valmis", true);
         successCount++;
+        uploadResults.push({ success: true, data });
       } catch (err) {
         setStatus(file.name, "virhe", false);
+        uploadResults.push({ success: false, data: null });
         console.error(err);
       }
     }
@@ -181,6 +209,19 @@
       const sportOther = document.getElementById("game-sport-other").value;
       const laji = sportValue === "muu" ? (sportOther || "muu") : sportValue;
 
+      // Valitaan kansikuva: käyttäjän valitsema kuva, tai jos se
+      // sattui epäonnistumaan, ensimmäinen onnistunut lataus varana.
+      let kansikuva = null;
+      const chosen = uploadResults[coverIndex];
+      if (chosen && chosen.success) {
+        kansikuva = { public_id: chosen.data.public_id, format: chosen.data.format };
+      } else {
+        const firstSuccess = uploadResults.find((r) => r.success);
+        if (firstSuccess) {
+          kansikuva = { public_id: firstSuccess.data.public_id, format: firstSuccess.data.format };
+        }
+      }
+
       const entry = {
         tag,
         date,
@@ -189,7 +230,8 @@
         vierasjoukkue: away,
         title: `${home} - ${away}`,
         venue: venue || "",
-        raportti: report || ""
+        raportti: report || "",
+        kansikuva
       };
 
       const result = await registerGame(entry);
