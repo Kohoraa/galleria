@@ -116,6 +116,14 @@
 
       let heroSet = false;
 
+      // Nopea polku: jos tuoreimmalla ottelulla on tallennettu kansikuva,
+      // hero asetetaan heti — ei tarvitse odottaa erillistä kuvahakua.
+      if (games.length && games[0].kansikuva && games[0].kansikuva.public_id) {
+        const kv = games[0].kansikuva;
+        heroEl.style.backgroundImage = `url("${heroImgUrl(kv.public_id, kv.format)}")`;
+        heroSet = true;
+      }
+
       for (const game of latest) {
         const photo = await loadFirstPhoto(game.tag);
         renderCard(game, photo);
