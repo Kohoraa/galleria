@@ -400,7 +400,15 @@
 
       const heroEl = document.getElementById("hero");
       let heroSet = false;
-
+    
+      // Nopea polku: jos tuoreimmalla ottelulla on tallennettu kansikuva,
+      // hero asetetaan heti — ei tarvitse odottaa erillistä kuvahakua.
+      if (games.length && games[0].kansikuva && games[0].kansikuva.public_id) {
+        const kv = games[0].kansikuva;
+        const heroUrl = `https://res.cloudinary.com/${CLOUDINARY_CONFIG.cloudName}/image/upload/w_1600,h_1000,c_fill,g_auto,q_auto,f_auto/${kv.public_id}.${kv.format}`;
+        heroEl.style.backgroundImage = `url("${heroUrl}")`;
+        heroSet = true;
+      }
       // Jos linkki osoittaa tiettyyn otteluun (esim. lightboxin "pyydä kuva"
       // -linkistä), vieritetään sinne heti kun JUURI se ottelu on renderöity
       // — ei tarvitse odottaa kaikkien otteluiden latautumista.
