@@ -20,12 +20,6 @@
     return `https://res.cloudinary.com/${CLOUDINARY_CONFIG.cloudName}/image/upload/w_500,c_limit,q_auto,f_auto/${publicId}.${format}`;
   }
 
-  // Pieni, voimakkaasti sumennettu esikatseluversio — latautuu lähes
-  // välittömästi ja näytetään heti täyskokoisen kuvan latautuessa taustalla.
-  function blurUrl(publicId, format) {
-    const resize = `w_${targetWidth()},c_limit`;
-    return `https://res.cloudinary.com/${CLOUDINARY_CONFIG.cloudName}/image/upload/${resize},e_blur:1000,q_1,f_auto/${publicId}.${format}`;
-  }
 
   // Lasketaan sopiva leveys näytön koon mukaan (huomioi myös
   // retina-näytöt devicePixelRatio:n kautta), rajattuna järkeviin
@@ -62,12 +56,14 @@
     if (!item) return;
 
     lightboxImg.classList.add("is-loading");
-    lightboxImg.src = blurUrl(item.public_id, item.format);
+    // Käytetään jo ladattua pikkukuvaa välittömänä esikatseluna —
+    // se on todennäköisesti jo selaimen välimuistissa ruudukosta,
+    // joten tämä on nopeampi kuin erillinen sumennettu Cloudinary-haku.
+    lightboxImg.src = thumbUrl(item.public_id, item.format);
 
     const full = fullUrl(item.public_id, item.format);
     const loader = new Image();
     loader.onload = () => {
-      // Ohita jos käyttäjä ehti jo selata eteenpäin ennen latauksen valmistumista.
       if (currentImages[currentIndex] !== item) return;
       lightboxImg.src = full;
       lightboxImg.classList.remove("is-loading");
@@ -400,7 +396,15 @@
 
       const heroEl = document.getElementById("hero");
       let heroSet = false;
-
+    
+      // Nopea polku: jos tuoreimmalla ottelulla on tallennettu kansikuva,
+      // hero asetetaan heti — ei tarvitse odottaa erillistä kuvahakua.
+      if (games.length && games[0].kansikuva && games[0].kansikuva.public_id) {
+        const kv = games[0].kansikuva;
+        const heroUrl = `https://res.cloudinary.com/${CLOUDINARY_CONFIG.cloudName}/image/upload/w_1600,h_1000,c_fill,g_auto,q_auto,f_auto/${kv.public_id}.${kv.format}`;
+        heroEl.style.backgroundImage = `url("${heroUrl}")`;
+        heroSet = true;
+      }
       // Jos linkki osoittaa tiettyyn otteluun (esim. lightboxin "pyydä kuva"
       // -linkistä), vieritetään sinne heti kun JUURI se ottelu on renderöity
       // — ei tarvitse odottaa kaikkien otteluiden latautumista.
