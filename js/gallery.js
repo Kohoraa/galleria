@@ -71,6 +71,30 @@
     loader.src = full;
   }
 
+  // GoatCounter-tapahtumaseuranta (mukautetut tapahtumat Cloudflaren rinnalle).
+  // Ei riko mitään jos skripti ei vielä ole ehtinyt latautua.
+  function trackEvent(path, title) {
+    if (window.goatcounter && window.goatcounter.count) {
+      window.goatcounter.count({ path, title, event: true });
+    }
+  }
+
+  const gameViewObserver =
+    "IntersectionObserver" in window
+      ? new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                const tag = entry.target.dataset.tag;
+                if (tag) trackEvent(`ottelu-katselu/${tag}`, "Ottelu katsottu");
+                gameViewObserver.unobserve(entry.target);
+              }
+            });
+          },
+          { threshold: 0.3 }
+        )
+      : null;
+
   function formatDate(iso) {
     const d = new Date(iso + "T00:00:00");
     if (isNaN(d)) return iso;
@@ -113,6 +137,7 @@
     document.body.style.overflow = "hidden";
     preloadNeighbors(currentImages, currentIndex);
     updateCaptionLink(currentGame);
+    trackEvent(`kuva-avattu/${game.tag}`, "Kuva avattu");
   }
 
   function closeLightbox() {
@@ -204,6 +229,8 @@
     const section = document.createElement("section");
     section.className = "game";
     section.id = `ottelu-${game.tag}`;
+    section.dataset.tag = game.tag;
+    if (gameViewObserver) gameViewObserver.observe(section);
 
     const number = String(total - index).padStart(2, "0");
 
