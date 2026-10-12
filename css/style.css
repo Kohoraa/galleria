@@ -575,7 +575,7 @@ img {
 }
 
 .club-logo {
-  height: 22px;
+  height: 28px;
   width: auto;
   flex-shrink: 0;
 }
@@ -584,8 +584,8 @@ img {
   position: absolute;
   bottom: 8px;
   right: 8px;
-  width: 26px;
-  height: 26px;
+  width: 32px;
+  height: 32px;
   object-fit: contain;
   filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.6));
 }
@@ -606,7 +606,7 @@ img {
 }
 
 .club-strip img {
-  height: 26px;
+  height: 36px;
   width: auto;
   opacity: 0.9;
 }
