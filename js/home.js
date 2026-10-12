@@ -25,8 +25,9 @@
   // Laji määrää seuran logon: jääkiekko = Kohoraa, jalkapallo = Tuisku Orivesi.
   function clubLogoFor(laji) {
     const key = (laji || "").toLowerCase();
-    if (key === "jääkiekko") return { src: "assets/logo-jaakiekko.png", alt: "Kohoraa" };
+    if (key === "jääkiekko") return { src: "assets/logo-jaakiekko.png", alt: "Fortuna" };
     if (key === "jalkapallo") return { src: "assets/logo-tuisku.png", alt: "Tuisku Orivesi" };
+    if (key === "lentopallo") return { src: "assets/logo-lentopallo.png", alt: "OrPo Orivesi" };
     return null;
   }
 
