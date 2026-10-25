@@ -15,13 +15,16 @@ teknisesti alusta loppuun.
 
 - **Julkaista otteluista kuvia** ryhmiteltynä ottelun mukaan, useasta
   lajista ja seurasta samalla sivustolla
-- **Suodattaa lajin mukaan** (jääkiekko, jalkapallo, tai mikä tahansa
-  muu laji jonka lisäät)
+- **Suodattaa lajin mukaan** (jääkiekko, jalkapallo, lentopallo, tai
+  mikä tahansa muu laji jonka lisäät)
 - **Kirjoittaa lyhyen otteluraportin** kuvien yhteyteen, ei pelkkää
   kuvagalleriaa
 - **Rajata kuvien lisäämisen** vain itselleen (tai valituille
   henkilöille) Google-kirjautumisella — kuka tahansa ei voi ladata roskaa
   sivustolle
+- **Jakaa ottelun linkkinä**, joka näkyy WhatsAppissa, Facebookissa,
+  Applen Viesteissä ym. kuvallisena korttina: kansikuva, ottelun nimi,
+  päivämäärä ja raportin alku
 - **Ottaa vastaan yhteydenottoja ja kuvapyyntöjä** lomakkeella, joka
   osaa jo kertoa mistä ottelusta on kyse
 - **Lähettää alkuperäisiä, vesileimattomia kuvia** pyytäjälle yhdellä
@@ -99,10 +102,16 @@ Kun sivusto on pystyssä, uuden ottelun lisääminen menee näin:
 
 1. Avaa lataussivu ja kirjaudu Googlella
 2. Täytä päivämäärä, laji, kotijoukkue ja vierasjoukkue
-3. Raahaa kuvat laatikkoon
+3. Raahaa kuvat laatikkoon ja valitse niistä kansikuva
 4. Paina "Lataa kuvat" — kuvat menevät automaattisesti oikeaan paikkaan
    ja ottelu ilmestyy galleriaan itsestään, ilman että sinun tarvitsee
    koskea koodiin
+
+Ottelun saa jaettua galleriasta ottelun kohdalla olevalla
+**Jaa ottelu** -napilla. Puhelimessa se avaa jakovalikon, tietokoneella
+se kopioi linkin leikepöydälle. Linkki on muotoa
+`/ottelu/<ottelun-tag>`, ja sen esikatselukortti syntyy automaattisesti
+— uutta ottelua varten ei tarvitse tehdä mitään erikseen.
 
 Jos joku pyytää alkuperäisen kuvan yhteydenottolomakkeella, voit luoda
 hänelle valmiin latauslinkkipaketin ja vastausviestin parilla
@@ -214,26 +223,73 @@ tarvitse sitä.
 ## Tiedostorakenne
 
 ```
-etusivu.html    Etusivu — tuoreimmat ottelut, kuvapyyntö-banneri
-index.html      Galleria — kaikki ottelut, lajisuodatus, lightbox
-upload.html     Lataussivu (Google-kirjautumisen takana) + ylläpitotyökalut
+index.html          Etusivu — tuoreimmat ottelut
+ottelut.html        Galleria — kaikki ottelut, lajisuodatus, lightbox, jakonappi
+lataa.html          Ottelukohtainen latausminisivu (pikkukuvat + latauslinkit)
+upload.html         Lataussivu (Google-kirjautumisen takana) + ylläpitotyökalut
 yhteydenotto.html   Yhteydenottolomake, osaa yhdistää viestin tiettyyn otteluun
-games.json      Ottelurekisteri — "tietokanta" ilman erillistä tietokantaa
+games.json          Ottelurekisteri — "tietokanta" ilman erillistä tietokantaa
+manifest.json       Kotivalikkokuvake ja nimi (iOS/Android)
 
 css/style.css   Koko ulkoasu
 
 js/config.js          Julkiset asetukset (ei salaisuuksia)
 js/auth.js            Google-kirjautumisen käyttöliittymä
-js/gallery.js         Galleria, lajisuodatus, lightbox, vesileima, pyyhkäisytuki
+js/gallery.js         Galleria, lajisuodatus, lightbox, vesileima, pyyhkäisytuki, jakonappi
 js/home.js            Etusivun tuoreimmat-ottelut-korttinäkymä
-js/upload.js          Kuvien lataus + ottelun rekisteröinti
+js/upload.js          Kuvien lataus, kansikuvan valinta + ottelun rekisteröinti
 js/contact.js         Yhteydenottolomakkeen lähetys
 js/link-generator.js  Ylläpidon työkalu: yksittäiset latauslinkit kuvapyyntöihin
 
-netlify.toml                     Netlify-asetukset (mm. etusivun ohjaus)
+netlify.toml   Netlify-asetukset: jakolinkkien ohjaukset ja tietoturvaotsakkeet (CSP ym.)
+
+netlify/functions/jaa.js                    Jakolinkkien esikatselukortit (Open Graph), ks. alla
 netlify/functions/get-upload-signature.js   Varmistaa kirjautumisen, antaa allekirjoitetun latausluvan
 netlify/functions/add-game.js               Varmistaa kirjautumisen, päivittää games.json:n GitHubissa
+netlify/functions/get-download-link.js      Zip-paketti ottelun kuvista (ei oletuskäytössä)
+netlify/functions/utils/                    Yhteiset apukoodit (Google-tunnisteen ja Cloudinary-allekirjoituksen tarkistus)
 ```
+
+Huom: Netlify tekee funktion jokaisesta `netlify/functions`-kansion
+suorasta tiedostosta. Apukoodit kuuluvat `utils`-kansioon, funktiot
+eivät — ja funktion tiedostonimi kirjoitetaan pienillä kirjaimilla,
+koska ohjaukset kutsuvat sitä nimellä.
+
+---
+
+## Linkkien esikatselukortit (Open Graph)
+
+Kun linkki jaetaan WhatsAppissa, Facebookissa, Viesteissä tai
+vastaavassa, sovellus hakee sivulta Open Graph -tagit (`og:title`,
+`og:description`, `og:image` …) ja rakentaa niistä kuvallisen kortin.
+Nämä sovellukset eivät aja galleriaa rakentavaa JavaScriptiä, joten
+ottelukohtaiset tiedot pitää antaa niille valmiina HTML:nä.
+
+**Kiinteät sivut** (`index.html`, `ottelut.html`, `yhteydenotto.html`)
+sisältävät omat tagit suoraan HTML:ssä. Etusivun ja Ottelut-sivun
+kortin kuva on `/og-kuva/uusin`, joka ohjaa aina tuoreimman ottelun
+kansikuvaan.
+
+**Ottelukohtaiset jakolinkit** `/ottelu/<tag>` hoitaa
+`netlify/functions/jaa.js`:
+
+- Funktio lukee ottelun tiedot `games.json`:sta. Tiedosto niputetaan
+  funktioon deployn yhteydessä, joten uusi ottelu saa kortin samalla
+  deployllä kuin muukin sivusto.
+- Kortin kuva on ottelun kansikuva (tai vanhemmilla otteluilla
+  Cloudinaryn ensimmäinen kuva), rajattuna kokoon 1200×630 ja
+  vesileimattuna.
+- Esikatselua hakevat botit tunnistetaan User-Agentista, ja ne saavat
+  kortin tiedot. Tavallinen kävijä ohjataan palvelimen päässä suoraan
+  galleriaan oikean ottelun kohdalle (`ottelut.html#ottelu-<tag>`).
+  Tunnistus on tarpeen, koska esim. Applen Viestit ajaa JavaScriptin ja
+  seuraisi muuten ohjausta Ottelut-sivulle.
+
+**Testaus:** [Facebookin Sharing Debugger](https://developers.facebook.com/tools/debug/)
+näyttää tarkalleen, mitä botti sivulta löytää. Varoituksen puuttuvasta
+`fb:app_id`:stä voi jättää huomiotta. Sovellukset muistavat kerran
+haetun esikatselun, joten testatessa linkin perään voi lisätä
+esim. `?v=2`.
 
 ---
 
@@ -264,6 +320,16 @@ Cloudinaryn "Allow list resources" -asetus ei ole päällä.
 **Ottelu ei päivity automaattisesti latauksen jälkeen** — tarkista
 `GITHUB_TOKEN`-muuttuja ja että sillä on kirjoitusoikeus juuri tähän
 repoon.
+
+**Jakolinkki antaa 404:n** — tarkista, että `jaa.js` on juuri
+`netlify/functions`-kansiossa (ei `js`- tai `utils`-kansiossa) ja nimi
+on kirjoitettu pienillä kirjaimilla, sekä että `netlify.toml`:ssa on
+`/ottelu/*`-ohjaus.
+
+**Jaetussa linkissä ei näy kuvaa** — aja linkki Sharing Debuggerin läpi.
+Jos tagit ovat siellä kunnossa, vika on sovelluksen välimuistissa.
+Varmista myös, että jaat `/ottelu/...`-linkin eikä selaimen
+osoiteriviltä kopioitua `ottelut.html#...`-osoitetta.
 
 **Latauslinkki ei toimi** — jos käytät zip-pakettia (ei suositella
 ilmaisella Cloudinary-tasolla), tarkista raw-tiedostojen kokoraja ja
