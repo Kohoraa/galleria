@@ -661,6 +661,45 @@ img {
   color: var(--frost-dim);
 }
 
+.game-actions {
+  margin: 0 0 1.5rem;
+}
+
+.game-share {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-height: 44px;
+  padding: 0.55rem 1.15rem 0.55rem 1rem;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.05rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--yellow);
+  background: rgba(242, 194, 48, 0.08);
+  border: 1.5px solid var(--yellow);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.game-share svg {
+  flex-shrink: 0;
+}
+
+.game-share:hover,
+.game-share:focus-visible,
+.game-share.is-done {
+  color: var(--navy);
+  background: var(--yellow);
+}
+
+.game-share:focus-visible {
+  outline: 2px solid var(--ice);
+  outline-offset: 2px;
+}
+
 .grid {
   columns: 4 220px;
   column-gap: 10px;

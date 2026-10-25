@@ -268,12 +268,34 @@
       meta.appendChild(venueSpan);
     }
 
+
+    section.appendChild(meta);
+
+    if (game.raportti) {
+      const report = document.createElement("p");
+      report.className = "game-report";
+      report.textContent = game.raportti;
+      section.appendChild(report);
+    }
+
     // Jakolinkki /ottelu/<tag> näyttää WhatsAppissa ym. ottelun oman
     // esikatselukortin (ks. netlify/functions/jaa.js).
+    const actions = document.createElement("div");
+    actions.className = "game-actions";
     const shareBtn = document.createElement("button");
     shareBtn.type = "button";
     shareBtn.className = "game-share";
-    shareBtn.textContent = "Jaa";
+    const shareIcon =
+      '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 8l5-5 5 5"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg>';
+    const doneIcon =
+      '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>';
+    const setLabel = (icon, text) => {
+      shareBtn.innerHTML = icon;
+      const span = document.createElement("span");
+      span.textContent = text;
+      shareBtn.appendChild(span);
+    };
+    setLabel(shareIcon, "Jaa ottelu");
     shareBtn.addEventListener("click", async () => {
       const url = `${window.location.origin}/ottelu/${encodeURIComponent(game.tag)}`;
       if (navigator.share) {
@@ -286,22 +308,18 @@
       }
       try {
         await navigator.clipboard.writeText(url);
-        shareBtn.textContent = "Linkki kopioitu";
+        shareBtn.classList.add("is-done");
+        setLabel(doneIcon, "Linkki kopioitu");
       } catch (e) {
         window.prompt("Kopioi linkki:", url);
       }
-      setTimeout(() => { shareBtn.textContent = "Jaa"; }, 2000);
+      setTimeout(() => {
+        shareBtn.classList.remove("is-done");
+        setLabel(shareIcon, "Jaa ottelu");
+      }, 2000);
     });
-    meta.appendChild(shareBtn);
-
-    section.appendChild(meta);
-
-    if (game.raportti) {
-      const report = document.createElement("p");
-      report.className = "game-report";
-      report.textContent = game.raportti;
-      section.appendChild(report);
-    }
+    actions.appendChild(shareBtn);
+    section.appendChild(actions);
 
     const resources = game.resources || [];
 
