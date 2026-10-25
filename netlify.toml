@@ -2,6 +2,18 @@
   publish = "."
   functions = "netlify/functions"
 
+# Ottelukohtaiset jakolinkit (linkin esikatselukortit WhatsAppissa ym.)
+[[redirects]]
+  from = "/ottelu/*"
+  to = "/.netlify/functions/jaa/:splat"
+  status = 200
+
+# Tuoreimman ottelun kansikuva etusivun og:image-tagille
+[[redirects]]
+  from = "/og-kuva/uusin"
+  to = "/.netlify/functions/jaa/og-kuva/uusin"
+  status = 200
+
 [[headers]]
   for = "/*"
   [headers.values]
