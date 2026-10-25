@@ -17,6 +17,11 @@
 const games = require("../../games.json");
 
 const SITE = "https://kohoraa.netlify.app";
+
+// Linkkien esikatselua hakevat botit. Applen Viestit esiintyy nimellä
+// facebookexternalhit, Signal ja moni muu samoin, joten lista kattaa ne.
+const PREVIEW_BOTS =
+  /facebookexternalhit|facebot|whatsapp|twitterbot|telegrambot|slackbot|slack-imgproxy|discordbot|linkedinbot|skypeuripreview|teams|applebot|googlebot|bingbot|pinterest|redditbot|embedly|iframely|outbrain|vkshare|w3c_validator|signal|mastodon|bluesky|cardyb/i;
 const CLOUD = process.env.CLOUDINARY_CLOUD_NAME || "cnqsmdm5";
 
 // 1200x630 on Facebookin/WhatsAppin suosittelema kortin kuvakoko.
@@ -113,7 +118,6 @@ function sharePage(game, image) {
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="robots" content="noindex, follow" />
 <meta name="theme-color" content="#121212" />
-<script>location.replace(${JSON.stringify(target)});</script>
 </head>
 <body style="background:#121212;color:#e8eef5;font-family:sans-serif;padding:2rem">
 <p><a href="${esc(target)}" style="color:#f5c518">Siirry ottelun kuviin: ${esc(game.title || "Ottelu")}</a></p>
@@ -146,12 +150,30 @@ exports.handler = async (event) => {
     };
   }
 
+  // Ihmiset ohjataan suoraan galleriaan palvelimen päässä. Kortti näytetään
+  // vain esikatselua hakeville boteille. Tämä on tärkeää, koska osa niistä
+  // (esim. Applen Viestit) ajaa JavaScriptin ja seuraisi muuten
+  // uudelleenohjausta Ottelut-sivulle, jolloin ottelun oma kortti jäisi pois.
+  const ua = (event.headers && (event.headers["user-agent"] || event.headers["User-Agent"])) || "";
+  if (!PREVIEW_BOTS.test(ua)) {
+    return {
+      statusCode: 302,
+      headers: {
+        Location: `/ottelut.html#ottelu-${encodeURIComponent(game.tag)}`,
+        "Cache-Control": "no-store",
+        Vary: "User-Agent"
+      },
+      body: ""
+    };
+  }
+
   const image = await coverFor(game);
   return {
     statusCode: 200,
     headers: {
       "Content-Type": "text/html; charset=utf-8",
-      "Cache-Control": "public, max-age=300"
+      "Cache-Control": "no-store",
+      Vary: "User-Agent"
     },
     body: sharePage(game, image)
   };
