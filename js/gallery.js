@@ -267,6 +267,33 @@
       venueSpan.textContent = game.venue;
       meta.appendChild(venueSpan);
     }
+
+    // Jakolinkki /ottelu/<tag> näyttää WhatsAppissa ym. ottelun oman
+    // esikatselukortin (ks. netlify/functions/jaa.js).
+    const shareBtn = document.createElement("button");
+    shareBtn.type = "button";
+    shareBtn.className = "game-share";
+    shareBtn.textContent = "Jaa";
+    shareBtn.addEventListener("click", async () => {
+      const url = `${window.location.origin}/ottelu/${encodeURIComponent(game.tag)}`;
+      if (navigator.share) {
+        try {
+          await navigator.share({ title: game.title || "Ottelu", url });
+        } catch (e) {
+          // käyttäjä perui jakamisen
+        }
+        return;
+      }
+      try {
+        await navigator.clipboard.writeText(url);
+        shareBtn.textContent = "Linkki kopioitu";
+      } catch (e) {
+        window.prompt("Kopioi linkki:", url);
+      }
+      setTimeout(() => { shareBtn.textContent = "Jaa"; }, 2000);
+    });
+    meta.appendChild(shareBtn);
+
     section.appendChild(meta);
 
     if (game.raportti) {
